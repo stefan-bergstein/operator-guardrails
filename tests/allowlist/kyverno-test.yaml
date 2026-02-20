@@ -1,0 +1,24 @@
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: operator-allowlist-test
+policies:
+  - ../../policies/allowlist/allow-operator-subscriptions.yaml
+variables: values.yaml
+resources:
+  - ../../policies/allowlist/allowed-operators-configmap.yaml
+  - resources/whitelisted-subscription.yaml
+  - resources/non-whitelisted-subscription.yaml
+results:
+  - policy: allow-operator-subscriptions
+    rule: check-subscription-name
+    resources:
+      - aap-operator
+    kind: Subscription
+    result: fail
+  - policy: allow-operator-subscriptions
+    rule: check-subscription-name
+    resources:
+      - web-terminal
+    kind: Subscription
+    result: pass

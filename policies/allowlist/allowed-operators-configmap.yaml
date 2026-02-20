@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: allowed-operators
+  namespace: kyverno
+  labels:
+    app.kubernetes.io/part-of: operator-guardrails
+data:
+  # Comma-separated list of OLM package names to allow.
+  # Only operators in this list may be installed. All others are denied.
+  # To update the list, edit and re-apply:
+  #   oc apply -f policies/allowlist/allowed-operators-configmap.yaml
+  #
+  packages: >-
+    web-terminal,
+    openshift-gitops-operator

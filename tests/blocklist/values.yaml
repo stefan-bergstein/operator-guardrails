@@ -1,0 +1,12 @@
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Values
+metadata:
+  name: test-values
+policies:
+  - name: block-operator-subscriptions
+    rules:
+      - name: check-subscription-name
+        values:
+          blockedPackages:
+            data:
+              packages: "ansible-automation-platform-operator, serverless-operator, openshift-pipelines-operator-rh, servicemeshoperator, cluster-logging, compliance-operator"

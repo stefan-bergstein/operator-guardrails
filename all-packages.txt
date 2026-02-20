@@ -1,0 +1,626 @@
+NAME                                                  CATALOG               AGE
+odoo-operator                                         Community Operators   79d
+f5-ai-security-operator                               Certified Operators   79d
+intel-device-plugins-operator                         Certified Operators   79d
+power-monitoring-operator                             Red Hat Operators     79d
+apimatic-kubernetes-operator                          Community Operators   79d
+eclipse-che                                           Community Operators   79d
+loki-helm-operator                                    Community Operators   79d
+flux                                                  Community Operators   79d
+netscaler-adm-agent-operator                          Certified Operators   79d
+odf-dependencies                                      Red Hat Operators     79d
+fuse-online                                           Red Hat Operators     79d
+ack-acmpca-controller                                 Community Operators   79d
+ack-ssm-controller                                    Community Operators   79d
+nexus-operator-m88i                                   Community Operators   79d
+cockroachdb                                           Community Operators   79d
+mcg-operator                                          Red Hat Operators     79d
+das-operator                                          Red Hat Operators     79d
+trident-operator                                      Community Operators   79d
+smb-csi-driver-operator                               Red Hat Operators     79d
+sonataflow-operator                                   Community Operators   79d
+fujitsu-enterprise-postgres-operator-with-cg-module   Certified Operators   79d
+linstor-operator                                      Certified Operators   79d
+ack-eks-controller                                    Community Operators   79d
+ovms-operator-rhmp                                    Red Hat Marketplace   79d
+strimzi-kafka-operator                                Community Operators   79d
+kedify-agent-helm-operator                            Certified Operators   79d
+percona-server-mysql-operator-certified               Certified Operators   79d
+rhpam-kogito-operator                                 Red Hat Operators     79d
+kernel-module-management-hub                          Red Hat Operators     79d
+ack-sqs-controller                                    Community Operators   79d
+konveyor-operator                                     Community Operators   79d
+rhods-prometheus-operator                             Red Hat Operators     79d
+kruize-operator                                       Community Operators   79d
+cloudbees-ci-rhmp                                     Red Hat Marketplace   79d
+abot-operator-rhmp                                    Red Hat Marketplace   79d
+aqua                                                  Community Operators   79d
+cockroachdb-certified                                 Certified Operators   79d
+scaleops-operator                                     Certified Operators   79d
+bamoe-businessautomation-operator                     Red Hat Operators     79d
+community-windows-machine-config-operator             Community Operators   79d
+lib-bucket-provisioner                                Community Operators   79d
+mtv-operator                                          Red Hat Operators     79d
+dynatrace-operator                                    Certified Operators   79d
+apicast-operator                                      Red Hat Operators     79d
+openebs                                               Community Operators   79d
+gitops-primer                                         Community Operators   79d
+mongodb-atlas-kubernetes                              Certified Operators   79d
+cloudnative-pg                                        Certified Operators   79d
+gatekeeper-operator-product                           Red Hat Operators     79d
+tang-operator                                         Red Hat Operators     79d
+kubevirt-hyperconverged                               Red Hat Operators     79d
+clusterpulse                                          Community Operators   79d
+openshift-secondary-scheduler-operator                Red Hat Operators     79d
+analytics-operator                                    Community Operators   79d
+percona-postgresql-operator-certified-rhmp            Red Hat Marketplace   79d
+istio-workspace-operator                              Community Operators   79d
+eventing-kogito                                       Community Operators   79d
+cfm-operator                                          Certified Operators   79d
+dell-csm-operator-certified                           Certified Operators   79d
+jws-operator                                          Red Hat Operators     79d
+o-cloud-manager                                       Red Hat Operators     79d
+pcc-operator                                          Community Operators   79d
+tvo-operator                                          Certified Operators   79d
+stackable-hbase-operator                              Certified Operators   79d
+openshift-pipelines-operator-rh                       Red Hat Operators     79d
+ansible-automation-platform-operator                  Red Hat Operators     79d
+pubsubplus-eventbroker-operator                       Community Operators   79d
+hspc-operator                                         Certified Operators   79d
+metallb-operator                                      Red Hat Operators     79d
+ingress-node-firewall                                 Red Hat Operators     79d
+ack-elasticache-controller                            Community Operators   79d
+ocm-operator                                          Community Operators   79d
+ibmcloud-operator                                     Community Operators   79d
+self-node-remediation                                 Community Operators   79d
+ack-opensearchservice-controller                      Community Operators   79d
+bpfman-operator                                       Community Operators   79d
+kiali-ossm                                            Red Hat Operators     79d
+kubecost                                              Community Operators   79d
+infinibox-operator-certified                          Certified Operators   79d
+openshift-fusion-access-operator                      Certified Operators   79d
+trustify-operator                                     Community Operators   79d
+datatrucker-operator                                  Community Operators   79d
+cluster-aas-operator                                  Community Operators   79d
+gitlab-operator-kubernetes                            Community Operators   79d
+debezium-operator                                     Community Operators   79d
+must-gather-operator                                  Community Operators   79d
+percona-postgresql-operator-certified                 Certified Operators   79d
+leader-worker-set                                     Red Hat Operators     79d
+redhat-oadp-operator                                  Red Hat Operators     79d
+mongodb-atlas-kubernetes                              Community Operators   79d
+ack-efs-controller                                    Community Operators   79d
+apicurito                                             Community Operators   79d
+tawon-operator                                        Certified Operators   79d
+splunk-operator                                       Certified Operators   79d
+netai-demo-operator                                   Certified Operators   79d
+gcp-filestore-csi-driver-operator                     Red Hat Operators     79d
+node-healthcheck-operator                             Red Hat Operators     79d
+sandboxed-containers-operator                         Red Hat Operators     79d
+tagger                                                Community Operators   79d
+nginx-ingress-operator                                Certified Operators   79d
+servicemeshoperator                                   Red Hat Operators     79d
+sriov-network-operator                                Red Hat Operators     79d
+amq-broker-rhel9                                      Red Hat Operators     79d
+ack-kms-controller                                    Community Operators   79d
+ack-lambda-controller                                 Community Operators   79d
+ember-csi-community-operator                          Community Operators   79d
+hulft                                                 Certified Operators   79d
+devworkspace-operator                                 Red Hat Operators     79d
+ack-s3control-controller                              Community Operators   79d
+azure-service-operator                                Community Operators   79d
+app-insights-operator                                 Certified Operators   79d
+stackable-nifi-operator                               Certified Operators   79d
+openshift-gitops-operator                             Red Hat Operators     79d
+loki-operator                                         Red Hat Operators     79d
+apicurio-api-controller                               Community Operators   79d
+rabbitmq-messaging-topology-operator                  Community Operators   79d
+edp-keycloak-operator                                 Community Operators   79d
+digitalai-release-operator                            Certified Operators   79d
+node-observability-operator                           Red Hat Operators     79d
+cluster-kube-descheduler-operator                     Red Hat Operators     79d
+datagrid                                              Red Hat Operators     79d
+pubsubplus-eventbroker-operator                       Certified Operators   79d
+apicurio-registry-3                                   Red Hat Operators     79d
+opendatahub-operator                                  Community Operators   79d
+tigera-operator                                       Certified Operators   79d
+patterns-operator                                     Community Operators   79d
+authorino-operator                                    Community Operators   79d
+dynatrace-operator                                    Community Operators   79d
+codeflare-operator                                    Community Operators   79d
+neuvector-certified-operator                          Certified Operators   79d
+ibm-storage-odf-operator                              Certified Operators   79d
+cincinnati-operator                                   Red Hat Operators     79d
+ack-ec2-controller                                    Community Operators   79d
+kubevirt-wol                                          Community Operators   79d
+syndesis                                              Community Operators   79d
+skupper-operator                                      Community Operators   79d
+ipm-controller                                        Certified Operators   79d
+elasticsearch-eck-operator-certified                  Certified Operators   79d
+lbconfig-operator                                     Community Operators   79d
+fence-agents-remediation                              Red Hat Operators     79d
+rhdh                                                  Red Hat Operators     79d
+xcrypt-operator-rhmp                                  Red Hat Marketplace   79d
+grafana-operator                                      Community Operators   79d
+integrity-shield-operator                             Community Operators   79d
+percona-server-mongodb-operator-certified             Certified Operators   79d
+nvidia-maintenance-operator                           Certified Operators   79d
+logic-operator-rhel8                                  Red Hat Operators     79d
+habana-ai-operator                                    Certified Operators   79d
+stackable-opensearch-operator                         Certified Operators   79d
+openshift-qiskit-operator                             Community Operators   79d
+etcd                                                  Community Operators   79d
+nutanixcsioperator                                    Certified Operators   79d
+aiu-operator                                          Certified Operators   79d
+stackable-airflow-operator                            Certified Operators   79d
+apicurio-registry-3                                   Community Operators   79d
+ack-glue-controller                                   Community Operators   79d
+ack-networkfirewall-controller                        Community Operators   79d
+quay-operator                                         Red Hat Operators     79d
+lightspeed-operator                                   Red Hat Operators     79d
+ibm-spectrum-scale-csi-operator                       Community Operators   79d
+eginnovations-operator                                Community Operators   79d
+stackable-spark-operator                              Certified Operators   79d
+sumologic-kubernetes-collection-helm-operator         Certified Operators   79d
+mongodb-enterprise                                    Certified Operators   79d
+odr-hub-operator                                      Red Hat Operators     79d
+rook-ceph-operator                                    Red Hat Operators     79d
+airflow-helm-operator                                 Community Operators   79d
+ack-ecrpublic-controller                              Community Operators   79d
+nexus-operator                                        Community Operators   79d
+appdynamics-operator                                  Certified Operators   79d
+cilium-enterprise                                     Certified Operators   79d
+job-set                                               Red Hat Operators     79d
+automotive-infra                                      Community Operators   79d
+kubeturbo-certified                                   Certified Operators   79d
+servicemeshoperator3                                  Red Hat Operators     79d
+container-security-operator                           Red Hat Operators     79d
+ack-ecs-controller                                    Community Operators   79d
+rabbitmq-cluster-operator                             Community Operators   79d
+sap-commerce-operator                                 Community Operators   79d
+kubeturbo                                             Community Operators   79d
+gitlab-runner-operator                                Certified Operators   79d
+accuknox-operator-certified                           Certified Operators   79d
+security-profiles-operator                            Red Hat Operators     79d
+infoscale-sds-operator                                Certified Operators   79d
+sumologic-kubernetes-collection-helm-operator-rhmp    Red Hat Marketplace   79d
+joget-dx8-operator-rhmp                               Red Hat Marketplace   79d
+nxiq-operator-certified                               Certified Operators   79d
+vast-csi-operator                                     Certified Operators   79d
+stackable-commons-operator                            Certified Operators   79d
+cloudera-streams-messaging-kubernetes-operator        Certified Operators   79d
+zabbix-operator-certified                             Certified Operators   79d
+bpfman-operator                                       Red Hat Operators     79d
+redis-enterprise-operator-cert                        Certified Operators   79d
+model-builder-for-vision-certified-rhmp               Red Hat Marketplace   79d
+oadp-operator                                         Community Operators   79d
+netscaler-operator                                    Certified Operators   79d
+crunchy-postgres-operator                             Certified Operators   79d
+run-once-duration-override-operator                   Red Hat Operators     79d
+stolostron                                            Community Operators   79d
+xspc-operator                                         Certified Operators   79d
+ndmspc-operator                                       Community Operators   79d
+redis-enterprise-operator-cert-rhmp                   Red Hat Marketplace   79d
+ack-cloudtrail-controller                             Community Operators   79d
+topology-aware-lifecycle-manager                      Red Hat Operators     79d
+anzounstructured-operator-rhmp                        Red Hat Marketplace   79d
+prometurbo-certified                                  Certified Operators   79d
+kernel-module-management                              Red Hat Operators     79d
+seldon-operator                                       Community Operators   79d
+sigstore-helm-operator                                Community Operators   79d
+falcon-operator                                       Certified Operators   79d
+recipe                                                Red Hat Operators     79d
+visionone-containersecurity                           Community Operators   79d
+ack-acm-controller                                    Community Operators   79d
+egressip-ipam-operator                                Community Operators   79d
+ibm-security-verify-access-operator                   Certified Operators   79d
+odigos-operator                                       Certified Operators   79d
+harness-gitops-operator                               Certified Operators   79d
+redkey-operator                                       Community Operators   79d
+advanced-cluster-management                           Red Hat Operators     79d
+dns-operator                                          Community Operators   79d
+jumpstarter-operator                                  Community Operators   79d
+prometheus-exporter-operator                          Community Operators   79d
+ack-secretsmanager-controller                         Community Operators   79d
+airlock-microgateway                                  Certified Operators   79d
+percona-postgresql-operator                           Community Operators   79d
+open-liberty-certified                                Certified Operators   79d
+multicluster-global-hub-operator                      Community Operators   79d
+ack-route53resolver-controller                        Community Operators   79d
+application-services-metering-operator                Community Operators   79d
+nlp-server                                            Community Operators   79d
+layer7-operator                                       Community Operators   79d
+appdynamics-cloud-operator                            Certified Operators   79d
+infoscale-licensing-operator                          Certified Operators   79d
+zabbix-operator-certified-rhmp                        Red Hat Marketplace   79d
+kube-green                                            Community Operators   79d
+ack-bedrock-controller                                Community Operators   79d
+slurm-operator                                        Community Operators   79d
+red-hat-camel-k                                       Red Hat Operators     79d
+edb-hcp-operator                                      Certified Operators   79d
+cloud-native-postgresql                               Certified Operators   79d
+machine-deletion-remediation                          Red Hat Operators     79d
+windup-operator                                       Community Operators   79d
+dbaas-operator                                        Community Operators   79d
+move2kube-operator                                    Community Operators   79d
+vault-secrets-operator                                Certified Operators   79d
+stackable-trino-operator                              Certified Operators   79d
+timemachine-operator-rhmp                             Red Hat Marketplace   79d
+vfunction-server-operator-rhmp                        Red Hat Marketplace   79d
+runtime-fabric-operator                               Certified Operators   79d
+businessautomation-operator                           Red Hat Operators     79d
+mariadb-operator                                      Community Operators   79d
+ibm-block-csi-operator-community                      Community Operators   79d
+aws-efs-csi-driver-operator                           Red Hat Operators     79d
+ack-route53-controller                                Community Operators   79d
+gitlab-operator-kubernetes                            Certified Operators   79d
+susql-operator                                        Community Operators   79d
+sap-data-intelligence-observer-operator               Community Operators   79d
+odf-operator                                          Red Hat Operators     79d
+self-node-remediation                                 Red Hat Operators     79d
+skupper-operator                                      Red Hat Operators     79d
+pf-status-relay-operator                              Red Hat Operators     79d
+external-dns-operator                                 Red Hat Operators     79d
+neuvector-certified-operator-rhmp                     Red Hat Marketplace   79d
+coroot-operator                                       Certified Operators   79d
+openshift-builds-operator                             Red Hat Operators     79d
+clusterresourceoverride                               Red Hat Operators     79d
+fence-agents-remediation                              Community Operators   79d
+tenant-operator                                       Certified Operators   79d
+cli-manager                                           Red Hat Operators     79d
+skupper-netobs-operator                               Red Hat Operators     79d
+rhoas-operator                                        Community Operators   79d
+costmanagement-metrics-operator                       Red Hat Operators     79d
+jaeger                                                Community Operators   79d
+amd-gpu-operator                                      Certified Operators   79d
+special-resource-operator                             Community Operators   79d
+t8c-certified-rhmp                                    Red Hat Marketplace   79d
+node-discovery-operator                               Community Operators   79d
+entando-k8s-operator-rhmp                             Red Hat Marketplace   79d
+volume-expander-operator                              Community Operators   79d
+service-binding-operator                              Community Operators   79d
+anzograph-operator                                    Certified Operators   79d
+percona-server-mysql-operator                         Community Operators   79d
+odr-cluster-operator                                  Red Hat Operators     79d
+vcp-operator                                          Certified Operators   79d
+ansible-cloud-addons-operator                         Red Hat Operators     79d
+multicluster-global-hub-operator-rh                   Red Hat Operators     79d
+tidb-operator                                         Community Operators   79d
+instana-agent-operator                                Certified Operators   79d
+minio-object-store-operator                           Certified Operators   79d
+secrets-store-csi-driver-operator                     Red Hat Operators     79d
+opentelemetry-operator                                Community Operators   79d
+ack-cloudwatchlogs-controller                         Community Operators   79d
+ack-documentdb-controller                             Community Operators   79d
+openshiftartifactoryha-operator                       Certified Operators   79d
+multicluster-engine                                   Red Hat Operators     79d
+iomesh-operator-rhmp                                  Red Hat Marketplace   79d
+instana-agent-operator-rhmp                           Red Hat Marketplace   79d
+sosreport-operator                                    Community Operators   79d
+tempo-operator                                        Community Operators   79d
+stackable-zookeeper-operator                          Certified Operators   79d
+mtc-operator                                          Red Hat Operators     79d
+submariner                                            Red Hat Operators     79d
+openshift-cert-manager-operator                       Red Hat Operators     79d
+anzograph-operator-rhmp                               Red Hat Marketplace   79d
+kubeturbo-certified-rhmp                              Red Hat Marketplace   79d
+ack-s3-controller                                     Community Operators   79d
+raftt-operator                                        Certified Operators   79d
+web-terminal                                          Red Hat Operators     79d
+ocs-operator                                          Red Hat Operators     79d
+flux                                                  Red Hat Marketplace   79d
+gitwebhook-operator                                   Community Operators   79d
+ack-ecr-controller                                    Community Operators   79d
+ack-recyclebin-controller                             Community Operators   79d
+neuvector-community-operator                          Community Operators   79d
+arkmq-org-broker-operator                             Community Operators   79d
+openshift-custom-metrics-autoscaler-operator          Red Hat Operators     79d
+template-operator                                     Certified Operators   79d
+stackable-opa-operator                                Certified Operators   79d
+pg4k-pgd                                              Certified Operators   79d
+percona-xtradb-cluster-operator-certified             Certified Operators   79d
+ack-memorydb-controller                               Community Operators   79d
+beegfs-csi-driver-operator                            Community Operators   79d
+aci-containers-operator                               Certified Operators   79d
+datadog-operator-certified-rhmp                       Red Hat Marketplace   79d
+argocd-operator                                       Community Operators   79d
+stackable-superset-operator                           Certified Operators   79d
+ncn-operator                                          Community Operators   79d
+fqdn-egress-operator                                  Community Operators   79d
+snapscheduler                                         Community Operators   79d
+conjur-follower-operator                              Certified Operators   79d
+korrel8r                                              Community Operators   79d
+serverless-operator                                   Red Hat Operators     79d
+aikit-operator-rhmp                                   Red Hat Marketplace   79d
+ack-prometheusservice-controller                      Community Operators   79d
+ack-dynamodb-controller                               Community Operators   79d
+community-trivy-operator                              Community Operators   79d
+ack-emrcontainers-controller                          Community Operators   79d
+operator-certification-operator                       Certified Operators   79d
+rh-service-binding-operator                           Red Hat Operators     79d
+ibm-block-csi-operator                                Certified Operators   79d
+stackable-listener-operator                           Certified Operators   79d
+yaks                                                  Community Operators   79d
+nfs-provisioner-operator                              Community Operators   79d
+kepler-operator                                       Community Operators   79d
+bamoe-kogito-operator                                 Red Hat Operators     79d
+hyperfoil-bundle                                      Community Operators   79d
+3scale-operator                                       Red Hat Operators     79d
+namespace-configuration-operator                      Community Operators   79d
+github-arc-operator                                   Community Operators   79d
+ack-wafv2-controller                                  Community Operators   79d
+percona-server-mongodb-operator                       Community Operators   79d
+marin3r                                               Community Operators   79d
+openshift-zero-trust-workload-identity-manager        Red Hat Operators     79d
+netobserv-operator                                    Red Hat Operators     79d
+amq7-interconnect-operator                            Red Hat Operators     79d
+aws-load-balancer-operator                            Red Hat Operators     79d
+mercury-operator                                      Community Operators   79d
+ack-rds-controller                                    Community Operators   79d
+k8gb                                                  Community Operators   79d
+logging-operator                                      Community Operators   79d
+cephcsi-operator                                      Red Hat Operators     79d
+keepalived-operator                                   Community Operators   79d
+hpe-filex-csi-operator                                Certified Operators   79d
+kogito-operator                                       Community Operators   79d
+victoriametrics-operator                              Certified Operators   79d
+k8s-triliovault                                       Certified Operators   79d
+runtime-component-operator-certified                  Certified Operators   79d
+cryostat-operator                                     Red Hat Operators     79d
+stackable-secret-operator                             Certified Operators   79d
+t8c-tsc-client-certified                              Certified Operators   79d
+infoscale-dr-manager                                  Certified Operators   79d
+digitalai-deploy-operator                             Certified Operators   79d
+ack-bedrockagentcorecontrol-controller                Community Operators   79d
+cluster-logging                                       Red Hat Operators     79d
+rhacs-operator                                        Red Hat Operators     79d
+linstor-operator-rhmp                                 Red Hat Marketplace   79d
+rsct-operator                                         Community Operators   79d
+hedvig-operator                                       Community Operators   79d
+rbln-npu-operator                                     Certified Operators   79d
+ptp-operator                                          Red Hat Operators     79d
+rhtas-operator                                        Red Hat Operators     79d
+apicast-community-operator                            Community Operators   79d
+ack-cognitoidentityprovider-controller                Community Operators   79d
+ack-kafka-controller                                  Community Operators   79d
+ibm-security-verify-access-operator                   Community Operators   79d
+ibm-application-gateway-operator                      Certified Operators   79d
+rhsso-operator                                        Red Hat Operators     79d
+lifecycle-agent                                       Red Hat Operators     79d
+customized-user-remediation                           Community Operators   79d
+koku-metrics-operator                                 Community Operators   79d
+model-validation-operator                             Red Hat Operators     79d
+ack-ses-controller                                    Community Operators   79d
+flink-kubernetes-operator                             Community Operators   79d
+kubemq-operator-marketplace-rhmp                      Red Hat Marketplace   79d
+hawtio-operator                                       Community Operators   79d
+datadog-operator-certified                            Certified Operators   79d
+mongodb-kubernetes                                    Certified Operators   79d
+tf-controller                                         Community Operators   79d
+ack-elbv2-controller                                  Community Operators   79d
+annotationlab                                         Community Operators   79d
+l5-operator                                           Community Operators   79d
+kubecost-operator                                     Certified Operators   79d
+percona-server-mongodb-operator-certified-rhmp        Red Hat Marketplace   79d
+victoriametrics-operator                              Community Operators   79d
+stackgres-certified                                   Certified Operators   79d
+kubebrowser                                           Community Operators   79d
+trustee-operator                                      Red Hat Operators     79d
+fuse-console                                          Red Hat Operators     79d
+node-maintenance-operator                             Red Hat Operators     79d
+anzo-operator-rhmp                                    Red Hat Marketplace   79d
+keycloak-permissions-operator                         Community Operators   79d
+redis-operator                                        Community Operators   79d
+3scale-community-operator                             Community Operators   79d
+vertical-pod-autoscaler                               Red Hat Operators     79d
+fujitsu-enterprise-postgres-operator                  Certified Operators   79d
+percona-xtradb-cluster-operator                       Community Operators   79d
+nim-operator-certified                                Certified Operators   79d
+kubeblocks                                            Certified Operators   79d
+mariadb-enterprise-operator                           Certified Operators   79d
+file-integrity-operator                               Red Hat Operators     79d
+tempo-product                                         Red Hat Operators     79d
+dynatrace-operator-rhmp                               Red Hat Marketplace   79d
+dell-csm-operator                                     Community Operators   79d
+cp-fko                                                Certified Operators   79d
+kurrentdb-operator                                    Certified Operators   79d
+odf-multicluster-orchestrator                         Red Hat Operators     79d
+k10-kasten-operator-rhmp                              Red Hat Marketplace   79d
+percona-xtradb-cluster-operator-certified-rhmp        Red Hat Marketplace   79d
+stackgres-community                                   Community Operators   79d
+cass-operator                                         Certified Operators   79d
+policy-controller-operator                            Red Hat Operators     79d
+sap-hana-express-operator                             Community Operators   79d
+amq-streams-proxy                                     Red Hat Operators     79d
+keda                                                  Community Operators   79d
+klusterlet                                            Community Operators   79d
+aqua-operator-certified                               Certified Operators   79d
+mtr-operator                                          Red Hat Operators     79d
+cockroachdb-certified-rhmp                            Red Hat Marketplace   79d
+kuadrant-operator                                     Community Operators   79d
+sailoperator                                          Community Operators   79d
+aic-operator                                          Certified Operators   79d
+nvidia-network-operator                               Certified Operators   79d
+marketplace-games-operator-rhmp                       Red Hat Marketplace   79d
+dns-operator                                          Red Hat Operators     79d
+socmmd                                                Community Operators   79d
+proactive-node-scaling-operator                       Community Operators   79d
+keycloak-operator                                     Community Operators   79d
+verticadb-operator                                    Community Operators   79d
+kubearmor-operator-certified                          Certified Operators   79d
+gpu-operator-certified                                Certified Operators   79d
+kubernetes-nmstate-operator                           Red Hat Operators     79d
+ack-apigateway-controller                             Community Operators   79d
+awss3-operator-registry                               Community Operators   79d
+alvearie-imaging-ingestion                            Community Operators   79d
+ack-sagemaker-controller                              Community Operators   79d
+seldon-deploy-operator-rhmp                           Red Hat Marketplace   79d
+ack-athena-controller                                 Community Operators   79d
+ocs-client-operator                                   Red Hat Operators     79d
+fuse-apicurito                                        Red Hat Operators     79d
+community-kubevirt-hyperconverged                     Community Operators   79d
+mongodb-operator                                      Community Operators   79d
+appian-operator                                       Certified Operators   79d
+hnas-csi-operator                                     Certified Operators   79d
+rhcl-operator                                         Red Hat Operators     79d
+datadog-operator                                      Community Operators   79d
+ripsaw                                                Community Operators   79d
+reportportal-operator                                 Community Operators   79d
+hibernation-operator                                  Certified Operators   79d
+eginnovations-operator                                Certified Operators   79d
+anzounstructured-operator                             Certified Operators   79d
+multiarch-tuning-operator                             Red Hat Operators     79d
+stackable-hive-operator                               Certified Operators   79d
+jupyter-notebook-validator-operator                   Community Operators   79d
+ack-applicationautoscaling-controller                 Community Operators   79d
+sriov-fec                                             Certified Operators   79d
+keysight-loadcore-agents                              Certified Operators   79d
+stackable-druid-operator                              Certified Operators   79d
+spyre-operator                                        Certified Operators   79d
+volsync-product                                       Red Hat Operators     79d
+ack-codeartifact-controller                           Community Operators   79d
+node-maintenance-operator                             Community Operators   79d
+clife                                                 Certified Operators   79d
+hpe-csi-operator                                      Certified Operators   79d
+cte-k8s-operator                                      Certified Operators   79d
+rhbk-operator                                         Red Hat Operators     79d
+lightbits-operator                                    Certified Operators   79d
+hazelcast-platform-operator                           Certified Operators   79d
+aerospike-kubernetes-operator-rhmp                    Red Hat Marketplace   79d
+coherence-operator                                    Community Operators   79d
+gitlab-runner-operator                                Community Operators   79d
+multicluster-operators-subscription                   Community Operators   79d
+observability-operator                                Community Operators   79d
+nsm-operator                                          Community Operators   79d
+odf-prometheus-operator                               Red Hat Operators     79d
+hcp-terraform-operator                                Certified Operators   79d
+scylladb-operator                                     Certified Operators   79d
+jenkins2tekton-operator                               Certified Operators   79d
+dpu-operator                                          Red Hat Operators     79d
+ack-sns-controller                                    Community Operators   79d
+ack-eventbridge-controller                            Community Operators   79d
+trident-operator                                      Certified Operators   79d
+openshift-external-secrets-operator                   Red Hat Operators     79d
+ack-organizations-controller                          Community Operators   79d
+ack-cloudwatch-controller                             Community Operators   79d
+opentelemetry-product                                 Red Hat Operators     79d
+service-registry-operator                             Red Hat Operators     79d
+authorino-operator                                    Red Hat Operators     79d
+ndb-operator                                          Community Operators   79d
+ack-cloudfront-controller                             Community Operators   79d
+alloydb-omni-operator                                 Community Operators   79d
+synaxg-operator                                       Certified Operators   79d
+odf-csi-addons-operator                               Red Hat Operators     79d
+kueue-operator                                        Red Hat Operators     79d
+aerospike-kubernetes-operator                         Community Operators   79d
+ipfs-operator                                         Community Operators   79d
+dxoperator                                            Certified Operators   79d
+eap                                                   Red Hat Operators     79d
+logic-operator                                        Red Hat Operators     79d
+machine-deletion-remediation                          Community Operators   79d
+exascaler-csi-driver-operator                         Certified Operators   79d
+lvms-operator                                         Red Hat Operators     79d
+ibm-metrics-operator                                  Certified Operators   79d
+confluent-for-kubernetes                              Certified Operators   79d
+local-storage-operator                                Red Hat Operators     79d
+dapr-kubernetes-operator                              Community Operators   79d
+flux-operator                                         Community Operators   79d
+silicom-sts-operator                                  Community Operators   79d
+cluster-manager                                       Community Operators   79d
+node-healthcheck-operator                             Community Operators   79d
+runtimes-inventory-operator                           Red Hat Operators     79d
+abinitio-runtime-operator                             Certified Operators   79d
+devspaces                                             Red Hat Operators     79d
+ecr-secret-operator                                   Community Operators   79d
+openshift-node-upgrade-mutex-operator                 Community Operators   79d
+microcks                                              Community Operators   79d
+cass-operator-community                               Community Operators   79d
+amq-broker-rhel8                                      Red Hat Operators     79d
+wandb-operator                                        Community Operators   79d
+stackable-hdfs-operator                               Certified Operators   79d
+ack-apigatewayv2-controller                           Community Operators   79d
+horreum-operator                                      Community Operators   79d
+devopsinabox                                          Community Operators   79d
+prometheus                                            Community Operators   79d
+spark-helm-operator                                   Community Operators   79d
+vault-config-operator                                 Community Operators   79d
+sonar-operator                                        Community Operators   79d
+red-hat-hawtio-operator                               Red Hat Operators     79d
+kubernetes-imagepuller-operator                       Community Operators   79d
+prometurbo                                            Community Operators   79d
+function-mesh                                         Certified Operators   79d
+uma-operator                                          Certified Operators   79d
+numaresources-operator                                Red Hat Operators     79d
+hive-operator                                         Community Operators   79d
+ack-iam-controller                                    Community Operators   79d
+amq-streams                                           Red Hat Operators     79d
+pelorus-operator                                      Community Operators   79d
+multi-nic-cni-operator                                Community Operators   79d
+project-quay                                          Community Operators   79d
+kubemq-operator-marketplace                           Certified Operators   79d
+t8c-certified                                         Certified Operators   79d
+portworx-certified                                    Certified Operators   79d
+compliance-operator                                   Red Hat Operators     79d
+cert-utils-operator                                   Community Operators   79d
+camel-karavan-operator                                Community Operators   79d
+resource-locker-operator                              Community Operators   79d
+eclipse-amlen-operator                                Community Operators   79d
+aws-neuron-operator                                   Community Operators   79d
+t8c                                                   Community Operators   79d
+uma-team-operator                                     Certified Operators   79d
+starburst-enterprise-helm-operator-rhmp               Red Hat Marketplace   79d
+ibm-data-reporter-operator                            Certified Operators   79d
+anzo-operator                                         Certified Operators   79d
+quay-bridge-operator                                  Red Hat Operators     79d
+stackgres                                             Red Hat Marketplace   79d
+cluster-impairment-operator                           Community Operators   79d
+ack-bedrockagent-controller                           Community Operators   79d
+ack-opensearchserverless-controller                   Community Operators   79d
+infinispan                                            Community Operators   79d
+uma-admin-operator                                    Certified Operators   79d
+mta-operator                                          Red Hat Operators     79d
+joget-dx-operator-rhmp                                Red Hat Marketplace   79d
+global-load-balancer-operator                         Community Operators   79d
+apicurio-registry                                     Community Operators   79d
+patch-operator                                        Community Operators   79d
+stolostron-engine                                     Community Operators   79d
+intel-network-operator                                Certified Operators   79d
+deployment-validation-operator                        Red Hat Operators     79d
+rhods-operator                                        Red Hat Operators     79d
+ack-ram-controller                                    Community Operators   79d
+ack-sfn-controller                                    Community Operators   79d
+camel-k                                               Community Operators   79d
+nexus-repository-ha-operator-certified                Certified Operators   79d
+nfd                                                   Red Hat Operators     79d
+rhtpa-operator                                        Red Hat Operators     79d
+ack-mq-controller                                     Community Operators   79d
+cluster-observability-operator                        Red Hat Operators     79d
+ack-firehose-controller                               Community Operators   79d
+aws-efs-operator                                      Community Operators   79d
+ack-keyspaces-controller                              Community Operators   79d
+universal-crossplane                                  Community Operators   79d
+group-sync-operator                                   Community Operators   79d
+stackable-kafka-operator                              Certified Operators   79d
+windows-machine-config-operator                       Red Hat Operators     79d
+yugabyte-platform-operator-bundle-rhmp                Red Hat Marketplace   79d
+pachyderm-operator-rhmp                               Red Hat Marketplace   79d
+ack-kinesis-controller                                Community Operators   79d
+limitador-operator                                    Community Operators   79d
+loki-operator                                         Community Operators   79d
+pulp-operator                                         Community Operators   79d
+assisted-service-operator                             Community Operators   79d
+limitador-operator                                    Red Hat Operators     79d
+webserver-operator                                    Certified Operators   79d
+hpe-ezmeral-csi-operator                              Certified Operators   79d
+sosivio                                               Community Operators   79d
+external-secrets-operator                             Community Operators   79d
+fossul-operator                                       Community Operators   79d
+oci-ccm-operator                                      Community Operators   79d
+mto-dependencies-operator                             Certified Operators   79d
+starburst-enterprise-helm-operator-paygo-rhmp         Red Hat Marketplace   79d
+cert-manager                                          Community Operators   79d
+deployment-validation-operator                        Community Operators   79d
+ack-pipes-controller                                  Community Operators   79d
+ucs-ci-solutions-operator                             Community Operators   79d
+varnish-operator                                      Community Operators   79d
+amq-streams-console                                   Red Hat Operators     79d

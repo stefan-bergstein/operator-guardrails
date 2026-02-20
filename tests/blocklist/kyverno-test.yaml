@@ -1,0 +1,24 @@
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: operator-guardrails-test
+policies:
+  - ../../policies/blocklist/block-operator-subscriptions.yaml
+variables: values.yaml
+resources:
+  - ../../policies/blocklist/blocked-operators-configmap.yaml
+  - resources/blocked-subscription.yaml
+  - resources/allowed-subscription.yaml
+results:
+  - policy: block-operator-subscriptions
+    rule: check-subscription-name
+    resources:
+      - aap-operator
+    kind: Subscription
+    result: fail
+  - policy: block-operator-subscriptions
+    rule: check-subscription-name
+    resources:
+      - web-terminal
+    kind: Subscription
+    result: pass

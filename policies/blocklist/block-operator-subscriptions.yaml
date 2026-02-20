@@ -1,0 +1,40 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: block-operator-subscriptions
+  labels:
+    app.kubernetes.io/part-of: operator-guardrails
+  annotations:
+    policies.kyverno.io/title: Block Operator Subscriptions
+    policies.kyverno.io/description: >-
+      Prevents creation or update of OLM Subscription resources for operators
+      listed in the blocked-operators ConfigMap. This stops OLM from installing
+      or upgrading blocked operators.
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/category: Operator Management
+spec:
+  # Change to "Audit" to log violations without blocking.
+  validationFailureAction: Enforce
+  background: false
+  rules:
+    - name: check-subscription-name
+      match:
+        any:
+          - resources:
+              kinds:
+                - operators.coreos.com/v1alpha1/Subscription
+      context:
+        - name: blockedPackages
+          configMap:
+            name: blocked-operators
+            namespace: kyverno
+      validate:
+        message: >-
+          The operator "{{ request.object.spec.name }}" is blocked by policy.
+          Contact your cluster administrator to request an exception.
+        deny:
+          conditions:
+            any:
+              - key: "{{ request.object.spec.name }}"
+                operator: AnyIn
+                value: "{{ blockedPackages.data.packages | split(@, ', ') }}"

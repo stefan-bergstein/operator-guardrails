@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(kyverno test:*)",
+      "WebFetch(domain:kyverno.io)",
+      "WebFetch(domain:raw.githubusercontent.com)"
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: allow-operator-subscriptions
+  labels:
+    app.kubernetes.io/part-of: operator-guardrails
+  annotations:
+    policies.kyverno.io/title: Allow Operator Subscriptions
+    policies.kyverno.io/description: >-
+      Permits creation or update of OLM Subscription resources only for operators
+      listed in the allowed-operators ConfigMap. Operators not on the list are
+      denied, preventing unapproved installations.
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/category: Operator Management
+spec:
+  # Change to "Audit" to log violations without blocking.
+  validationFailureAction: Enforce
+  background: false
+  rules:
+    - name: check-subscription-name
+      match:
+        any:
+          - resources:
+              kinds:
+                - operators.coreos.com/v1alpha1/Subscription
+      context:
+        - name: allowedPackages
+          configMap:
+            name: allowed-operators
+            namespace: kyverno
+      validate:
+        message: >-
+          The operator "{{ request.object.spec.name }}" is not on the approved list.
+          Contact your cluster administrator to request approval.
+        deny:
+          conditions:
+            all:
+              - key: "{{ request.object.spec.name }}"
+                operator: AnyNotIn
+                value: "{{ allowedPackages.data.packages | split(@, ', ') }}"
