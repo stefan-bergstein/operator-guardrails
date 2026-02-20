@@ -182,6 +182,10 @@ Expected output for each:
 Test Summary: 2 tests passed and 0 tests failed
 ```
 
+## Disclaimer
+
+This is a **community project** and is **not supported by Red Hat**. It is provided as-is, without warranties or guarantees of any kind. This repository and its code were partially generated with the help of GenAI tools and may contain errors or inaccuracies. Use at your own risk and always review and test thoroughly before deploying to production environments.
+
 ## Further Reading
 
 - [docs/tutorial.md](docs/tutorial.md) -- step-by-step Kyverno tutorial covering installation, core concepts, deployment, and troubleshooting
