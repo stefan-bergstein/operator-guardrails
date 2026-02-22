@@ -103,6 +103,8 @@ tests/
       non-whitelisted-subscription.yaml # Sample unapproved Subscription (expects deny)
 docs/
   tutorial.md                          # Kyverno tutorial with OpenShift-specific guidance
+contrib/
+  no-oke-ops.sh                        # Helper to list non-OKE operators for blocklist generation
 ```
 
 ## Default Blocked Operators (Blocklist)
@@ -181,6 +183,12 @@ Expected output for each:
 ```
 Test Summary: 2 tests passed and 0 tests failed
 ```
+
+## Helper Scripts
+
+The `contrib/` directory contains helper scripts for generating operator lists. See [contrib/README.md](contrib/README.md) for details.
+
+- **no-oke-ops.sh** — queries a live cluster to list all operators not included in an OpenShift Kubernetes Engine (OKE) subscription. The output can be piped directly into the blocklist ConfigMap.
 
 ## Disclaimer
 
