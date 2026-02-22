@@ -1,5 +1,5 @@
 #
-# A poor attempt to list all operators that are nor covered with OKE
+# An attempt to list all operators that are not covered with OKE
 #
 
 oc get packagemanifests -n openshift-marketplace -l catalog=redhat-operators -o json | jq -r '
@@ -15,6 +15,6 @@ oc get packagemanifests -n openshift-marketplace -l catalog=redhat-operators -o 
     printf "%-35s | %-12s | %-30s | %-20s\n" "$name" "$channel" "$csv" "$sub"
 done | grep -v 'OpenShift Kubernetes Engine' | while read s r
 do
-echo $s
+  echo $s
 done | sort -u
 
