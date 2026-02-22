@@ -1,0 +1,45 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: audit-guardrail-changes
+  labels:
+    app.kubernetes.io/part-of: operator-guardrails
+  annotations:
+    policies.kyverno.io/title: Audit Guardrail Changes
+    policies.kyverno.io/description: >-
+      Logs an audit event whenever a resource belonging to the operator-guardrails
+      project is created, updated, or deleted. This provides an audit trail for
+      changes to operator control policies and their configuration.
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/category: Operator Management
+spec:
+  validationFailureAction: Audit
+  background: false
+  rules:
+    - name: log-guardrail-change
+      match:
+        any:
+          - resources:
+              kinds:
+                - ConfigMap
+              namespaces:
+                - kyverno
+              selector:
+                matchLabels:
+                  app.kubernetes.io/part-of: operator-guardrails
+          - resources:
+              kinds:
+                - kyverno.io/v1/ClusterPolicy
+              selector:
+                matchLabels:
+                  app.kubernetes.io/part-of: operator-guardrails
+      validate:
+        message: >-
+          Operator guardrail resource "{{ request.object.metadata.name }}" was
+          modified. Review cluster policy reports for an audit trail.
+        deny:
+          conditions:
+            any:
+              - key: "true"
+                operator: Equals
+                value: "true"

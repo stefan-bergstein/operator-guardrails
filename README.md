@@ -76,6 +76,15 @@ oc get clusterpolicies allow-operator-subscriptions
 
 Edit `policies/allowlist/allowed-operators-configmap.yaml` to change which operators are approved.
 
+### Optional — Audit policy (log changes to guardrail resources)
+
+```bash
+# Deploy the audit policy
+oc apply -k policies/audit/
+```
+
+This can be deployed alongside either the blocklist or allowlist policy.
+
 ## Project Structure
 
 ```
@@ -88,6 +97,9 @@ policies/
     allowed-operators-configmap.yaml   # List of allowed OLM package names
     allow-operator-subscriptions.yaml  # ClusterPolicy that enforces the allow list
     kustomization.yaml                 # Deploys both resources together
+  audit/
+    audit-guardrail-changes.yaml       # Audit policy logging changes to guardrail resources
+    kustomization.yaml                 # Deploys the audit policy
 tests/
   blocklist/
     kyverno-test.yaml                  # Test manifest for blocklist policy
@@ -101,6 +113,11 @@ tests/
     resources/
       whitelisted-subscription.yaml    # Sample approved Subscription (expects allow)
       non-whitelisted-subscription.yaml # Sample unapproved Subscription (expects deny)
+  audit/
+    kyverno-test.yaml                  # Test manifest for audit policy
+    resources/
+      guardrail-configmap.yaml         # ConfigMap with project label (expects audit)
+      regular-configmap.yaml           # ConfigMap without project label (expects skip)
 docs/
   tutorial.md                          # Kyverno tutorial with OpenShift-specific guidance
 contrib/
@@ -151,6 +168,23 @@ To find the correct OLM package name for an operator:
 oc get packagemanifests -n openshift-marketplace | grep <keyword>
 ```
 
+## Audit Policy
+
+The optional audit policy (`policies/audit/audit-guardrail-changes.yaml`) logs a policy violation whenever any operator guardrail resource is created, updated, or deleted. It matches all ConfigMaps and ClusterPolicies labelled `app.kubernetes.io/part-of: operator-guardrails`.
+
+This policy runs in `Audit` mode — it never blocks changes, only records them. Deploy it alongside whichever approach (blocklist or allowlist) you use:
+
+```bash
+oc apply -k policies/audit/
+```
+
+View the audit trail:
+
+```bash
+oc get policyreport -A
+oc get clusterpolicyreport
+```
+
 ## Enforcement Modes
 
 Both policies default to `Enforce`, which blocks non-compliant requests. To switch to `Audit` mode (log violations without blocking), change `validationFailureAction` in the respective policy YAML:
@@ -176,6 +210,9 @@ kyverno test tests/blocklist/
 
 # Run allowlist tests
 kyverno test tests/allowlist/
+
+# Run audit policy tests
+kyverno test tests/audit/
 ```
 
 Expected output for each:
