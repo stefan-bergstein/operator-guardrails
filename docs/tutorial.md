@@ -313,12 +313,12 @@ data:
     compliance-operator
 ```
 
-- **Kyverno:** `policies/blocklist/blocked-operators-configmap.yaml` (namespace: `kyverno`)
+- **Kyverno:** `policies/kyverno/blocklist/blocked-operators-configmap.yaml` (namespace: `kyverno`)
 - **VAP:** `policies/vap/blocklist/blocked-operators-configmap.yaml` (namespace: `operator-guardrails`)
 
 ### Kyverno — Block Subscriptions
 
-File: `policies/blocklist/block-operator-subscriptions.yaml`
+File: `policies/kyverno/blocklist/block-operator-subscriptions.yaml`
 
 When someone creates or updates a `Subscription` resource, this policy:
 
@@ -359,12 +359,12 @@ data:
     openshift-gitops-operator
 ```
 
-- **Kyverno:** `policies/allowlist/allowed-operators-configmap.yaml` (namespace: `kyverno`)
+- **Kyverno:** `policies/kyverno/allowlist/allowed-operators-configmap.yaml` (namespace: `kyverno`)
 - **VAP:** `policies/vap/allowlist/allowed-operators-configmap.yaml` (namespace: `operator-guardrails`)
 
 ### Kyverno — Allow Subscriptions
 
-File: `policies/allowlist/allow-operator-subscriptions.yaml`
+File: `policies/kyverno/allowlist/allow-operator-subscriptions.yaml`
 
 When someone creates or updates a `Subscription` resource, this policy:
 
@@ -417,7 +417,7 @@ Choose **one** approach — blocklist or allowlist — and **one** engine — Ky
 #### Blocklist — Using Kustomize (recommended)
 
 ```bash
-oc apply -k policies/blocklist/
+oc apply -k policies/kyverno/blocklist/
 ```
 
 This applies the blocked-operators ConfigMap and the block ClusterPolicy in one step.
@@ -425,7 +425,7 @@ This applies the blocked-operators ConfigMap and the block ClusterPolicy in one 
 #### Allowlist — Using Kustomize (recommended)
 
 ```bash
-oc apply -k policies/allowlist/
+oc apply -k policies/kyverno/allowlist/
 ```
 
 #### Verify Kyverno
@@ -492,10 +492,10 @@ brew install kyverno
 
 ```bash
 # Blocklist tests
-kyverno test tests/blocklist/
+kyverno test tests/kyverno/blocklist/
 
 # Allowlist tests
-kyverno test tests/allowlist/
+kyverno test tests/kyverno/allowlist/
 ```
 
 Each test directory contains a `kyverno-test.yaml` manifest referencing the policy, a values file for ConfigMap context data, and sample resources. The `results` section declares the expected outcome for each resource.
@@ -553,7 +553,7 @@ After deploying the policy, test it on the cluster.
 #### Blocklist — Blocked Subscription
 
 ```bash
-oc apply -f tests/blocklist/resources/blocked-subscription.yaml
+oc apply -f tests/kyverno/blocklist/resources/blocked-subscription.yaml
 ```
 
 Expected output:
@@ -573,7 +573,7 @@ block-operator-subscriptions:
 #### Blocklist — Allowed Subscription
 
 ```bash
-oc apply -f tests/blocklist/resources/allowed-subscription.yaml
+oc apply -f tests/kyverno/blocklist/resources/allowed-subscription.yaml
 ```
 
 Expected: the Subscription is created (or you see an OLM error if the operator doesn't exist in your catalog — but no Kyverno denial).
@@ -581,7 +581,7 @@ Expected: the Subscription is created (or you see an OLM error if the operator d
 #### Allowlist — Approved Subscription
 
 ```bash
-oc apply -f tests/allowlist/resources/whitelisted-subscription.yaml
+oc apply -f tests/kyverno/allowlist/resources/whitelisted-subscription.yaml
 ```
 
 Expected: the Subscription is created (the operator is on the approved list).
@@ -589,7 +589,7 @@ Expected: the Subscription is created (the operator is on the approved list).
 #### Allowlist — Unapproved Subscription
 
 ```bash
-oc apply -f tests/allowlist/resources/non-whitelisted-subscription.yaml
+oc apply -f tests/kyverno/allowlist/resources/non-whitelisted-subscription.yaml
 ```
 
 Expected output:
@@ -662,24 +662,24 @@ Contact your cluster administrator to request approval.
 
 #### Blocklist — Add or remove a blocked operator
 
-1. Edit `policies/blocklist/blocked-operators-configmap.yaml`.
+1. Edit `policies/kyverno/blocklist/blocked-operators-configmap.yaml`.
 2. Add or remove the OLM package name in the `packages` field.
 3. Apply the updated ConfigMap:
 
    ```bash
-   oc apply -f policies/blocklist/blocked-operators-configmap.yaml
+   oc apply -f policies/kyverno/blocklist/blocked-operators-configmap.yaml
    ```
 
 Kyverno picks up the ConfigMap change automatically — no policy restart needed.
 
 #### Allowlist — Add or remove an approved operator
 
-1. Edit `policies/allowlist/allowed-operators-configmap.yaml`.
+1. Edit `policies/kyverno/allowlist/allowed-operators-configmap.yaml`.
 2. Add or remove the OLM package name in the `packages` field.
 3. Apply the updated ConfigMap:
 
    ```bash
-   oc apply -f policies/allowlist/allowed-operators-configmap.yaml
+   oc apply -f policies/kyverno/allowlist/allowed-operators-configmap.yaml
    ```
 
 #### Switch to Audit mode

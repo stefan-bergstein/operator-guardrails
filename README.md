@@ -11,7 +11,7 @@ Two enforcement engines are provided — pick the one that suits your cluster:
 
 | Engine | Directory | Requires |
 |--------|-----------|----------|
-| **Kyverno** | `policies/blocklist/`, `policies/allowlist/`, `policies/audit/` | Kyverno controller installed on the cluster |
+| **Kyverno** | `policies/kyverno/blocklist/`, `policies/kyverno/allowlist/`, `policies/kyverno/audit/` | Kyverno controller installed on the cluster |
 | **Validating Admission Policy (VAP)** | `policies/vap/blocklist/`, `policies/vap/allowlist/`, `policies/vap/audit/` | Kubernetes 1.30+ / OpenShift 4.17+ (built-in, no extra controller) |
 
 ## How It Works
@@ -99,30 +99,30 @@ For more details, see [docs/tutorial.md](docs/tutorial.md#installing-kyverno-on-
 
 ```bash
 # Deploy the blocklist policy and ConfigMap
-oc apply -k policies/blocklist/
+oc apply -k policies/kyverno/blocklist/
 
 # Verify the policy is active
 oc get clusterpolicies block-operator-subscriptions
 ```
 
-Edit `policies/blocklist/blocked-operators-configmap.yaml` to change which operators are blocked.
+Edit `policies/kyverno/blocklist/blocked-operators-configmap.yaml` to change which operators are blocked.
 
 #### Option B — Allowlist (allow only approved operators)
 
 ```bash
 # Deploy the allowlist policy and ConfigMap
-oc apply -k policies/allowlist/
+oc apply -k policies/kyverno/allowlist/
 
 # Verify the policy is active
 oc get clusterpolicies allow-operator-subscriptions
 ```
 
-Edit `policies/allowlist/allowed-operators-configmap.yaml` to change which operators are approved.
+Edit `policies/kyverno/allowlist/allowed-operators-configmap.yaml` to change which operators are approved.
 
 #### Optional — Audit policy (log changes to guardrail resources)
 
 ```bash
-oc apply -k policies/audit/
+oc apply -k policies/kyverno/audit/
 ```
 
 ### Using Validating Admission Policy (no Kyverno required)
@@ -171,17 +171,18 @@ bootstrap/
     kyverno-application.yaml             # ArgoCD Application (Helm chart)
     kyverno-openshift-values.yaml        # Helm values for OpenShift (shared)
 policies/
-  blocklist/                             # Kyverno blocklist
-    blocked-operators-configmap.yaml
-    block-operator-subscriptions.yaml
-    kustomization.yaml
-  allowlist/                             # Kyverno allowlist
-    allowed-operators-configmap.yaml
-    allow-operator-subscriptions.yaml
-    kustomization.yaml
-  audit/                                 # Kyverno audit
-    audit-guardrail-changes.yaml
-    kustomization.yaml
+  kyverno/                               # Kyverno policies
+    blocklist/
+      blocked-operators-configmap.yaml
+      block-operator-subscriptions.yaml
+      kustomization.yaml
+    allowlist/
+      allowed-operators-configmap.yaml
+      allow-operator-subscriptions.yaml
+      kustomization.yaml
+    audit/
+      audit-guardrail-changes.yaml
+      kustomization.yaml
   vap/                                   # Validating Admission Policy (no Kyverno needed)
     namespace.yaml                         # operator-guardrails namespace
     blocklist/
@@ -200,23 +201,24 @@ policies/
       audit-guardrail-changes-binding.yaml
       kustomization.yaml
 tests/
-  blocklist/                             # Kyverno CLI tests (offline)
-    kyverno-test.yaml
-    values.yaml
-    resources/
-      blocked-subscription.yaml
-      allowed-subscription.yaml
-  allowlist/                             # Kyverno CLI tests (offline)
-    kyverno-test.yaml
-    values.yaml
-    resources/
-      whitelisted-subscription.yaml
-      non-whitelisted-subscription.yaml
-  audit/                                 # Kyverno CLI tests (offline)
-    kyverno-test.yaml
-    resources/
-      guardrail-configmap.yaml
-      regular-configmap.yaml
+  kyverno/                               # Kyverno CLI tests (offline)
+    blocklist/
+      kyverno-test.yaml
+      values.yaml
+      resources/
+        blocked-subscription.yaml
+        allowed-subscription.yaml
+    allowlist/
+      kyverno-test.yaml
+      values.yaml
+      resources/
+        whitelisted-subscription.yaml
+        non-whitelisted-subscription.yaml
+    audit/
+      kyverno-test.yaml
+      resources/
+        guardrail-configmap.yaml
+        regular-configmap.yaml
   vap/                                   # VAP tests (require running cluster)
     blocklist/
       test.sh
@@ -265,10 +267,10 @@ Edit the ConfigMap and re-apply. Kyverno detects changes automatically — no po
 
 ```bash
 # Blocklist
-oc apply -f policies/blocklist/blocked-operators-configmap.yaml
+oc apply -f policies/kyverno/blocklist/blocked-operators-configmap.yaml
 
 # Allowlist
-oc apply -f policies/allowlist/allowed-operators-configmap.yaml
+oc apply -f policies/kyverno/allowlist/allowed-operators-configmap.yaml
 ```
 
 ### VAP
@@ -300,7 +302,7 @@ This policy runs in `Audit` mode — it never blocks changes, only records them.
 Matches ConfigMaps (in the `kyverno` namespace) and ClusterPolicies with the guardrail label.
 
 ```bash
-oc apply -k policies/audit/
+oc apply -k policies/kyverno/audit/
 ```
 
 View the audit trail:
@@ -354,9 +356,9 @@ Audit events appear in the Kubernetes API server audit log.
 ### Kyverno (offline, no cluster required)
 
 ```bash
-kyverno test tests/blocklist/
-kyverno test tests/allowlist/
-kyverno test tests/audit/
+kyverno test tests/kyverno/blocklist/
+kyverno test tests/kyverno/allowlist/
+kyverno test tests/kyverno/audit/
 ```
 
 Expected output for each:

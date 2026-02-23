@@ -39,7 +39,7 @@ Pipe the output into the ConfigMap format expected by the blocklist policy.
 ```bash
 PACKAGES=$(bash contrib/no-oke-ops.sh | paste -sd ',' - | sed 's/,/,\n    /g')
 
-cat > policies/blocklist/blocked-operators-configmap.yaml <<EOF
+cat > policies/kyverno/blocklist/blocked-operators-configmap.yaml <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -57,7 +57,7 @@ EOF
 ```
 
 ```bash
-oc apply -f policies/blocklist/blocked-operators-configmap.yaml
+oc apply -f policies/kyverno/blocklist/blocked-operators-configmap.yaml
 ```
 
 #### For VAP (namespace: operator-guardrails)
