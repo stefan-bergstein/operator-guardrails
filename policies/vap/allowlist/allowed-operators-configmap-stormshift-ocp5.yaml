@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: allowed-operators
+  namespace: operator-guardrails
+  labels:
+    app.kubernetes.io/part-of: operator-guardrails
+data:
+  packages: >-
+    advanced-cluster-management,
+    cluster-kube-descheduler-operator,
+    devworkspace-operator,
+    external-secrets-operator,
+    kubernetes-imagepuller-operator,
+    kubernetes-nmstate-operator,
+    kubevirt-hyperconverged,
+    lightspeed-operator,
+    metallb-operator,
+    mtv-operator,
+    multicluster-engine,
+    openshift-cert-manager-operator,
+    openshift-gitops-operator,
+    openshift-pipelines-operator-rh,
+    redhat-oadp-operator,
+    rhbk-operator,
+    rhods-operator,
+    rhsso-operator,
+    serverless-operator,
+    web-terminal

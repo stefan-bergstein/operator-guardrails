@@ -4,7 +4,9 @@
       "Bash(kyverno test:*)",
       "WebFetch(domain:kyverno.io)",
       "WebFetch(domain:raw.githubusercontent.com)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(chmod:*)",
+      "Bash(kubectl kustomize:*)"
     ]
   }
 }

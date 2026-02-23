@@ -1,0 +1,14 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: allow-operator-subscriptions
+  labels:
+    app.kubernetes.io/part-of: operator-guardrails
+spec:
+  policyName: allow-operator-subscriptions
+  validationActions:
+    - Deny
+  paramRef:
+    name: allowed-operators
+    namespace: operator-guardrails
+    parameterNotFoundAction: Deny

@@ -1,0 +1,28 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: block-operator-subscriptions
+  labels:
+    app.kubernetes.io/part-of: operator-guardrails
+spec:
+  failurePolicy: Fail
+  paramKind:
+    apiVersion: v1
+    kind: ConfigMap
+  matchConstraints:
+    resourceRules:
+      - apiGroups: ["operators.coreos.com"]
+        apiVersions: ["v1alpha1"]
+        operations: ["CREATE", "UPDATE"]
+        resources: ["subscriptions"]
+  matchConditions:
+    - name: has-spec-name
+      expression: "has(object.spec) && has(object.spec.name)"
+  variables:
+    - name: blockedPackages
+      expression: "params.data.packages.split(',')"
+    - name: operatorName
+      expression: "object.spec.name"
+  validations:
+    - expression: "!variables.blockedPackages.exists(p, p.trim() == variables.operatorName)"
+      messageExpression: "'The operator \"' + variables.operatorName + '\" is blocked by policy. Contact your cluster administrator to request an exception.'"

@@ -1,13 +1,18 @@
-# Operator Guardrails with Kyverno
+# Operator Guardrails
 
 ## Purpose
 
-This project uses Kyverno policies to control which operators can be installed on OpenShift. Two independent approaches are available:
+This project controls which operators can be installed on OpenShift. Two independent approaches are available:
 
 - **Blocklist** — deny operators listed in a ConfigMap; allow everything else.
 - **Allowlist** — allow only operators listed in a ConfigMap; deny everything else.
 
 Each approach is deployed independently. The admin chooses one or the other.
+
+Two enforcement engines are provided — the admin picks one:
+
+- **Kyverno** (`policies/blocklist/`, `policies/allowlist/`, `policies/audit/`) — uses Kyverno ClusterPolicy resources.
+- **Validating Admission Policy** (`policies/vap/blocklist/`, `policies/vap/allowlist/`, `policies/vap/audit/`) — uses the built-in Kubernetes ValidatingAdmissionPolicy API (no external controller required).
 
 ## Project Structure
 
@@ -21,56 +26,84 @@ Each approach is deployed independently. The admin chooses one or the other.
 ├── docs/
 │   └── tutorial.md                      # Beginner Kyverno tutorial
 ├── policies/
-│   ├── blocklist/
-│   │   ├── kustomization.yaml               # Kustomize overlay for blocklist
-│   │   ├── blocked-operators-configmap.yaml  # ConfigMap with blocked operator list
-│   │   └── block-operator-subscriptions.yaml # Policy blocking Subscription resources
-│   ├── allowlist/
-│   │   ├── kustomization.yaml               # Kustomize overlay for allowlist
-│   │   ├── allowed-operators-configmap.yaml  # ConfigMap with allowed operator list
-│   │   └── allow-operator-subscriptions.yaml # Policy allowing only listed Subscriptions
-│   └── audit/
-│       ├── kustomization.yaml               # Kustomize overlay for audit policy
-│       └── audit-guardrail-changes.yaml     # Audit policy for guardrail resource changes
+│   ├── blocklist/                           # Kyverno blocklist
+│   │   ├── kustomization.yaml
+│   │   ├── blocked-operators-configmap.yaml
+│   │   └── block-operator-subscriptions.yaml
+│   ├── allowlist/                           # Kyverno allowlist
+│   │   ├── kustomization.yaml
+│   │   ├── allowed-operators-configmap.yaml
+│   │   └── allow-operator-subscriptions.yaml
+│   ├── audit/                               # Kyverno audit
+│   │   ├── kustomization.yaml
+│   │   └── audit-guardrail-changes.yaml
+│   └── vap/                                 # Validating Admission Policy (no Kyverno needed)
+│       ├── namespace.yaml                       # operator-guardrails namespace
+│       ├── blocklist/
+│       │   ├── kustomization.yaml
+│       │   ├── blocked-operators-configmap.yaml
+│       │   ├── block-operator-subscriptions-policy.yaml
+│       │   └── block-operator-subscriptions-binding.yaml
+│       ├── allowlist/
+│       │   ├── kustomization.yaml
+│       │   ├── allowed-operators-configmap.yaml
+│       │   ├── allowed-operators-configmap-stormshift-ocp5.yaml
+│       │   ├── allow-operator-subscriptions-policy.yaml
+│       │   └── allow-operator-subscriptions-binding.yaml
+│       └── audit/
+│           ├── kustomization.yaml
+│           ├── audit-guardrail-changes-policy.yaml
+│           └── audit-guardrail-changes-binding.yaml
 └── tests/
-    ├── blocklist/
-    │   ├── kyverno-test.yaml              # Kyverno CLI test manifest
-    │   ├── values.yaml                    # Context variable values for CLI testing
+    ├── blocklist/                           # Kyverno CLI tests
+    │   ├── kyverno-test.yaml
+    │   ├── values.yaml
     │   └── resources/
     │       ├── blocked-subscription.yaml
     │       └── allowed-subscription.yaml
-    ├── allowlist/
-    │   ├── kyverno-test.yaml              # Kyverno CLI test manifest
-    │   ├── values.yaml                    # Context variable values for CLI testing
+    ├── allowlist/                           # Kyverno CLI tests
+    │   ├── kyverno-test.yaml
+    │   ├── values.yaml
     │   └── resources/
     │       ├── whitelisted-subscription.yaml
     │       └── non-whitelisted-subscription.yaml
-    └── audit/
-        ├── kyverno-test.yaml              # Kyverno CLI test manifest
-        └── resources/
-            ├── guardrail-configmap.yaml
-            └── regular-configmap.yaml
+    ├── audit/                               # Kyverno CLI tests
+    │   ├── kyverno-test.yaml
+    │   └── resources/
+    │       ├── guardrail-configmap.yaml
+    │       └── regular-configmap.yaml
+    └── vap/                                 # VAP tests (require running cluster)
+        ├── blocklist/
+        │   ├── test.sh
+        │   └── resources/
+        │       ├── blocked-subscription.yaml
+        │       └── allowed-subscription.yaml
+        ├── allowlist/
+        │   ├── test.sh
+        │   └── resources/
+        │       ├── whitelisted-subscription.yaml
+        │       └── non-whitelisted-subscription.yaml
+        └── audit/
+            ├── test.sh
+            └── resources/
+                ├── guardrail-configmap.yaml
+                └── regular-configmap.yaml
 ```
 
 ## Conventions
 
 - All Kubernetes manifests use YAML.
-- Blocklist and allowlist policies default to `Enforce` mode (not `Audit`). The audit policy uses `Audit` mode by design.
-- The blocklist is driven by `policies/blocklist/blocked-operators-configmap.yaml`.
-- The allowlist is driven by `policies/allowlist/allowed-operators-configmap.yaml`.
+- Blocklist and allowlist policies default to `Enforce` / `Deny` mode (not `Audit`). The audit policy uses `Audit` mode by design.
+- **Kyverno:** blocklist driven by `policies/blocklist/blocked-operators-configmap.yaml`; allowlist driven by `policies/allowlist/allowed-operators-configmap.yaml`.
+- **VAP:** blocklist driven by `policies/vap/blocklist/blocked-operators-configmap.yaml`; allowlist driven by `policies/vap/allowlist/allowed-operators-configmap.yaml`. ConfigMaps live in the `operator-guardrails` namespace.
 
 ## Testing
 
-Run Kyverno CLI tests locally (no cluster required):
+### Kyverno (offline, no cluster required)
 
 ```bash
-# Blocklist tests
 kyverno test tests/blocklist/
-
-# Allowlist tests
 kyverno test tests/allowlist/
-
-# Audit policy tests
 kyverno test tests/audit/
 ```
 
@@ -83,10 +116,27 @@ brew install kyverno
 # or download from https://github.com/kyverno/kyverno/releases
 ```
 
-## Deploying
+### VAP (requires a running cluster with OLM)
+
+Deploy the policies first, then run the test scripts:
 
 ```bash
-# Bootstrap Kyverno via ArgoCD (prerequisite for all policies)
+# Blocklist tests
+tests/vap/blocklist/test.sh
+
+# Allowlist tests
+tests/vap/allowlist/test.sh
+
+# Audit policy tests
+tests/vap/audit/test.sh
+```
+
+## Deploying
+
+### Option A: Kyverno
+
+```bash
+# Bootstrap Kyverno via ArgoCD (prerequisite for Kyverno policies)
 oc apply -f bootstrap/kyverno/namespace.yaml
 oc apply -f bootstrap/kyverno/kyverno-application.yaml
 
@@ -98,4 +148,20 @@ oc apply -k policies/allowlist/
 
 # Optionally, deploy the audit policy alongside either approach
 oc apply -k policies/audit/
+```
+
+### Option B: Validating Admission Policy (no external controller)
+
+```bash
+# Create the namespace for VAP ConfigMaps (prerequisite)
+oc apply -f policies/vap/namespace.yaml
+
+# Deploy the blocklist approach
+oc apply -k policies/vap/blocklist/
+
+# OR deploy the allowlist approach
+oc apply -k policies/vap/allowlist/
+
+# Optionally, deploy the audit policy alongside either approach
+oc apply -k policies/vap/audit/
 ```

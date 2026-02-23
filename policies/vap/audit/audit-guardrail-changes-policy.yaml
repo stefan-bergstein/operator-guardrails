@@ -1,0 +1,26 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: audit-guardrail-changes
+  labels:
+    app.kubernetes.io/part-of: operator-guardrails
+spec:
+  failurePolicy: Ignore
+  matchConstraints:
+    objectSelector:
+      matchLabels:
+        app.kubernetes.io/part-of: operator-guardrails
+    resourceRules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE", "UPDATE", "DELETE"]
+        resources: ["configmaps"]
+      - apiGroups: ["admissionregistration.k8s.io"]
+        apiVersions: ["v1"]
+        operations: ["CREATE", "UPDATE", "DELETE"]
+        resources: ["validatingadmissionpolicies", "validatingadmissionpolicybindings"]
+  validations:
+    - expression: "false"
+      message: >-
+        Operator guardrail resource was modified.
+        Review audit logs for details.

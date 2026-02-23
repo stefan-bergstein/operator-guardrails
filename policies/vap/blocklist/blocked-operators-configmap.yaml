@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: blocked-operators
+  namespace: operator-guardrails
+  labels:
+    app.kubernetes.io/part-of: operator-guardrails
+data:
+  packages: >-
+    ansible-automation-platform-operator,
+    serverless-operator,
+    openshift-pipelines-operator-rh,
+    servicemeshoperator,
+    cluster-logging,
+    compliance-operator
