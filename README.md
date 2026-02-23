@@ -389,6 +389,12 @@ The `contrib/` directory contains helper scripts for generating operator lists. 
 
 This is a **community project** and is **not supported by Red Hat**. It is provided as-is, without warranties or guarantees of any kind. This repository and its code were partially generated with the help of GenAI tools and may contain errors or inaccuracies. Use at your own risk and always review and test thoroughly before deploying to production environments.
 
+## License
+
+Apache-2.0 License
+
+This project is licensed under the Apache License 2.0. See the [LICENSE](LICENSE-2.0.txt) file for details.
+
 ## Further Reading
 
 - [docs/tutorial.md](docs/tutorial.md) — step-by-step tutorial covering both Kyverno and VAP approaches
