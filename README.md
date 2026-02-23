@@ -50,6 +50,35 @@ Is spec.name in the allowed packages list?
 - `oc` CLI authenticated to the cluster
 - Kyverno CLI for local testing (`brew install kyverno`)
 
+## Installing Kyverno
+
+### Option 1 — Helm CLI
+
+```bash
+helm repo add kyverno https://kyverno.github.io/kyverno/
+helm repo update
+helm install kyverno kyverno/kyverno \
+  --namespace kyverno \
+  --create-namespace \
+  --version 3.5.2 \
+  -f bootstrap/kyverno/kyverno-openshift-values.yaml
+```
+
+### Option 2 — ArgoCD (OpenShift GitOps)
+
+```bash
+oc apply -f bootstrap/kyverno/namespace.yaml
+oc apply -f bootstrap/kyverno/kyverno-application.yaml
+```
+
+Both options use the same OpenShift-compatible Helm values (`bootstrap/kyverno/kyverno-openshift-values.yaml`). Verify the deployment:
+
+```bash
+oc get pods -n kyverno
+```
+
+For more details, see [docs/tutorial.md](docs/tutorial.md#installing-kyverno-on-openshift).
+
 ## Quick Start
 
 ### Option A — Blocklist (deny specific operators)
@@ -88,6 +117,11 @@ This can be deployed alongside either the blocklist or allowlist policy.
 ## Project Structure
 
 ```
+bootstrap/
+  kyverno/
+    namespace.yaml                       # Namespace for Kyverno
+    kyverno-application.yaml             # ArgoCD Application (Helm chart)
+    kyverno-openshift-values.yaml        # Helm values for OpenShift (shared)
 policies/
   blocklist/
     blocked-operators-configmap.yaml   # List of blocked OLM package names

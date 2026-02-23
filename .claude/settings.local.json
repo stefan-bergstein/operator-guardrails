@@ -3,7 +3,8 @@
     "allow": [
       "Bash(kyverno test:*)",
       "WebFetch(domain:kyverno.io)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebSearch"
     ]
   }
 }

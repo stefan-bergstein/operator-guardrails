@@ -1,0 +1,89 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kyverno
+  namespace: openshift-gitops
+  labels:
+    app.kubernetes.io/part-of: operator-guardrails
+  annotations:
+    argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+spec:
+  project: default
+  source:
+    repoURL: https://kyverno.github.io/kyverno/
+    chart: kyverno
+    targetRevision: 3.5.2
+    helm:
+      values: |
+        config:
+          webhookLabels:
+            app.kubernetes.io/managed-by: argocd
+          create: true
+          preserve: false
+        admissionController:
+          replicas: 3
+        backgroundController:
+          replicas: 3
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              memory: 256Mi
+        reportsController:
+          replicas: 3
+          resources:
+            limits:
+              memory: 512Mi
+        crds:
+          migration:
+            securityContext:
+              runAsUser: null
+              runAsGroup: null
+              runAsNonRoot: true
+              privileged: false
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+              seccompProfile:
+                type: RuntimeDefault
+        webhooksCleanup:
+          enabled: true
+          securityContext:
+            runAsUser: null
+            runAsGroup: null
+            runAsNonRoot: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+        cleanupController:
+          replicas: 3
+          securityContext:
+            runAsUser: null
+            runAsGroup: null
+            runAsNonRoot: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kyverno
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+      # - Replace=true Dont use https://github.com/kyverno/kyverno/issues/10283

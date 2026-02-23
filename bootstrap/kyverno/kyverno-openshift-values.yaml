@@ -1,0 +1,75 @@
+# Helm values for installing Kyverno on OpenShift.
+# Used by both the ArgoCD Application and standalone Helm installs.
+#
+# OpenShift 4.11+ uses the restricted-v2 SCC, which assigns UIDs/GIDs
+# from a namespace-specific range. The chart defaults hardcode
+# runAsUser: 65534, which conflicts with this SCC. Setting runAsUser
+# and runAsGroup to null lets the SCC inject the correct values.
+
+config:
+  webhookLabels:
+    app.kubernetes.io/managed-by: argocd
+  create: true
+  preserve: false
+
+admissionController:
+  replicas: 3
+
+backgroundController:
+  replicas: 3
+  resources:
+    limits:
+      memory: 512Mi
+    requests:
+      memory: 256Mi
+
+reportsController:
+  replicas: 3
+  resources:
+    limits:
+      memory: 512Mi
+
+crds:
+  migration:
+    securityContext:
+      runAsUser: null
+      runAsGroup: null
+      runAsNonRoot: true
+      privileged: false
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop:
+          - ALL
+      seccompProfile:
+        type: RuntimeDefault
+
+webhooksCleanup:
+  enabled: true
+  securityContext:
+    runAsUser: null
+    runAsGroup: null
+    runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop:
+        - ALL
+    seccompProfile:
+      type: RuntimeDefault
+
+cleanupController:
+  replicas: 3
+  securityContext:
+    runAsUser: null
+    runAsGroup: null
+    runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop:
+        - ALL
+    seccompProfile:
+      type: RuntimeDefault

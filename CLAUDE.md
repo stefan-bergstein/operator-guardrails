@@ -13,6 +13,11 @@ Each approach is deployed independently. The admin chooses one or the other.
 
 ```
 ├── CLAUDE.md                            # This file
+├── bootstrap/
+│   └── kyverno/
+│       ├── namespace.yaml                   # Namespace for Kyverno
+│       ├── kyverno-application.yaml         # ArgoCD Application (Helm chart)
+│       └── kyverno-openshift-values.yaml     # Helm values for OpenShift (shared)
 ├── docs/
 │   └── tutorial.md                      # Beginner Kyverno tutorial
 ├── policies/
@@ -81,6 +86,10 @@ brew install kyverno
 ## Deploying
 
 ```bash
+# Bootstrap Kyverno via ArgoCD (prerequisite for all policies)
+oc apply -f bootstrap/kyverno/namespace.yaml
+oc apply -f bootstrap/kyverno/kyverno-application.yaml
+
 # Deploy the blocklist approach
 oc apply -k policies/blocklist/
 

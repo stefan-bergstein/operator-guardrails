@@ -49,12 +49,56 @@ oc get pods -n kyverno
 You should see Kyverno pods in `Running` state.
 
 
+### Install Kyverno using Helm
+
+You can install Kyverno directly with the Helm CLI. The values file `bootstrap/kyverno/kyverno-openshift-values.yaml` contains OpenShift-specific overrides (security context settings for the restricted-v2 SCC and HA replica counts).
+
+```bash
+helm repo add kyverno https://kyverno.github.io/kyverno/
+helm repo update
+helm install kyverno kyverno/kyverno \
+  --namespace kyverno \
+  --create-namespace \
+  --version 3.5.2 \
+  -f bootstrap/kyverno/kyverno-openshift-values.yaml
+```
+
+Verify the installation:
+
+```bash
+oc get pods -n kyverno
+```
+
+You should see the Kyverno controller pods in `Running` state.
+
+### Install Kyverno using ArgoCD (Helm)
+
+If your cluster runs ArgoCD (OpenShift GitOps), you can install Kyverno as a Helm-managed ArgoCD Application. The bootstrap manifests in this repository include OpenShift-specific settings (security context overrides for the restricted-v2 SCC and webhook namespace exclusions for OpenShift system namespaces).
+
+```bash
+oc apply -f bootstrap/kyverno/namespace.yaml
+oc apply -f bootstrap/kyverno/kyverno-application.yaml
+```
+
+ArgoCD will install the Kyverno Helm chart into the `kyverno` namespace and keep it in sync. Verify the sync status and pods:
+
+```bash
+oc get application kyverno -n openshift-gitops
+oc get pods -n kyverno
+```
+
+The ArgoCD Application manifest (`bootstrap/kyverno/kyverno-application.yaml`) already configures the webhook namespace exclusion for OpenShift system namespaces, so the manual ConfigMap update below is not needed when using this method.
+
 ### Update kyverno config map
-On OpenShift clusters, if you want to prevent the scanning and validation of the resources in the system namespaces (the ones starting with openshift), you can update the `kyverno config map` to include the following `webhooks`entry
+
+When using the raw YAML install method above, you should prevent Kyverno from scanning OpenShift system namespaces. Update the `kyverno` ConfigMap to include the following `webhooks` entry:
 
 ```
 {"key":"openshift.io/run-level","operator":"NotIn", "values": ["0","1"]}
 ```
+
+This step is not needed when installing via ArgoCD, as it is handled by the Helm values.
+
 ---
 
 ## Core Concepts
