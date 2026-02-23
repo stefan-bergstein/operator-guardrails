@@ -1,24 +1,32 @@
-# Kyverno Operator Guardrails on OpenShift — Tutorial
+# Operator Guardrails on OpenShift — Tutorial
 
-This tutorial walks you through using Kyverno to control which operators can be installed on an OpenShift cluster. Two approaches are covered:
+This tutorial walks you through controlling which operators can be installed on an OpenShift cluster. Two policy approaches are covered:
 
 - **Blocklist** — deny specific operators; allow everything else.
 - **Allowlist** — allow only approved operators; deny everything else.
 
-No prior Kyverno experience is required.
+Two enforcement engines are available:
+
+- **Kyverno** — a standalone policy engine deployed as a controller.
+- **Validating Admission Policy (VAP)** — built into Kubernetes 1.30+ / OpenShift 4.17+, no extra controller needed.
+
+No prior Kyverno or VAP experience is required.
 
 ## Table of Contents
 
 1. [What is Kyverno?](#what-is-kyverno)
-2. [Installing Kyverno on OpenShift](#installing-kyverno-on-openshift)
-3. [Core Concepts](#core-concepts)
-4. [How the Blocklist Policy Works](#how-the-blocklist-policy-works)
-5. [How the Allowlist Policy Works](#how-the-allowlist-policy-works)
-6. [Deploying the Policies](#deploying-the-policies)
-7. [Testing Locally with the Kyverno CLI](#testing-locally-with-the-kyverno-cli)
-8. [Verifying on a Live Cluster](#verifying-on-a-live-cluster)
-9. [Managing the Operator Lists](#managing-the-operator-lists)
-10. [Troubleshooting](#troubleshooting)
+2. [What is Validating Admission Policy?](#what-is-validating-admission-policy)
+3. [Installing Kyverno on OpenShift](#installing-kyverno-on-openshift)
+4. [Core Concepts — Kyverno](#core-concepts--kyverno)
+5. [Core Concepts — VAP](#core-concepts--vap)
+6. [How the Blocklist Policy Works](#how-the-blocklist-policy-works)
+7. [How the Allowlist Policy Works](#how-the-allowlist-policy-works)
+8. [Deploying the Policies](#deploying-the-policies)
+9. [Testing Locally with the Kyverno CLI](#testing-locally-with-the-kyverno-cli)
+10. [Testing VAP on a Live Cluster](#testing-vap-on-a-live-cluster)
+11. [Verifying on a Live Cluster](#verifying-on-a-live-cluster)
+12. [Managing the Operator Lists](#managing-the-operator-lists)
+13. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -31,6 +39,29 @@ Kyverno is a policy engine designed for Kubernetes. It runs as an admission cont
 - **No new language to learn.** Policies are plain Kubernetes YAML. There is no Rego or other DSL.
 - **Familiar tooling.** You manage policies with `kubectl`/`oc`, Kustomize, Helm, and GitOps workflows.
 - **Validate, mutate, or generate resources.** This project uses the *validate* capability to deny blocked operators.
+- **Offline testing.** The Kyverno CLI can test policies without a running cluster.
+
+## What is Validating Admission Policy?
+
+Validating Admission Policy (VAP) is a built-in Kubernetes feature (GA since Kubernetes 1.30 / OpenShift 4.17) that provides in-process admission control without an external webhook controller.
+
+**Why use it?**
+
+- **No controller to install.** VAP is part of the Kubernetes API server — nothing extra to deploy or maintain.
+- **CEL expressions.** Validation rules use the Common Expression Language (CEL), a lightweight, safe expression language.
+- **Lower latency.** Validation runs in-process, avoiding the network hop to a webhook.
+- **Two resources.** A `ValidatingAdmissionPolicy` defines the rules; a `ValidatingAdmissionPolicyBinding` scopes and activates them.
+
+**Trade-offs vs Kyverno:**
+
+| | Kyverno | VAP |
+|---|---|---|
+| Requires controller | Yes | No |
+| Expression language | JMESPath (in YAML) | CEL |
+| Offline CLI testing | Yes (`kyverno test`) | No (requires cluster) |
+| Mutation support | Yes | No |
+| Generation support | Yes | No |
+| Min K8s version | 1.25+ | 1.30+ |
 
 ## Installing Kyverno on OpenShift
 
@@ -101,7 +132,7 @@ This step is not needed when installing via ArgoCD, as it is handled by the Helm
 
 ---
 
-## Core Concepts
+## Core Concepts — Kyverno
 
 ### ClusterPolicy
 
@@ -168,15 +199,108 @@ Set the mode in `spec.validationFailureAction`.
 
 ---
 
+## Core Concepts — VAP
+
+### ValidatingAdmissionPolicy
+
+A `ValidatingAdmissionPolicy` is a cluster-scoped resource that defines validation rules using CEL expressions. It specifies what resources to match and how to validate them.
+
+```yaml
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: example-policy
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    resourceRules:
+      - apiGroups: ["apps"]
+        apiVersions: ["v1"]
+        operations: ["CREATE", "UPDATE"]
+        resources: ["deployments"]
+  validations:
+    - expression: "object.spec.replicas <= 5"
+      message: "Replicas must be 5 or fewer."
+```
+
+### ValidatingAdmissionPolicyBinding
+
+A `ValidatingAdmissionPolicyBinding` activates a policy and scopes it. Without a binding, the policy has no effect. The binding also specifies the enforcement action and parameter references.
+
+```yaml
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: example-policy
+spec:
+  policyName: example-policy
+  validationActions:
+    - Deny
+```
+
+### Parameters (paramKind / paramRef)
+
+VAP policies can reference external data through parameters. The policy declares a `paramKind` (e.g., ConfigMap), and the binding provides the specific `paramRef` (name and namespace). Inside CEL expressions, the parameter data is available as `params`.
+
+```yaml
+# In the policy
+spec:
+  paramKind:
+    apiVersion: v1
+    kind: ConfigMap
+
+# In the binding
+spec:
+  paramRef:
+    name: my-configmap
+    namespace: my-namespace
+    parameterNotFoundAction: Deny  # Fail-closed if ConfigMap is missing
+```
+
+### CEL Expressions
+
+CEL (Common Expression Language) is used for validation logic. Key variables:
+
+| Variable | Description |
+|----------|-------------|
+| `object` | The resource being created or updated |
+| `oldObject` | The existing resource (for UPDATE/DELETE) |
+| `params` | The parameter resource (e.g., ConfigMap data) |
+| `request` | The admission request metadata |
+
+Common CEL operations:
+
+```cel
+// String splitting and list operations
+params.data.packages.split(',')
+list.exists(item, item == "value")
+
+// Field existence checks
+has(object.spec.name)
+
+// String methods
+"  hello  ".trim()
+```
+
+### Validation Actions
+
+| Action | Behavior |
+|--------|----------|
+| `Deny` | Blocks non-compliant resources. The API request is denied. |
+| `Audit` | Allows the resource but records an audit annotation. |
+| `Warn` | Allows the resource but returns a warning to the client. |
+
+Set the action in the binding's `spec.validationActions` list.
+
+---
+
 ## How the Blocklist Policy Works
 
 The blocklist policy blocks OLM operator installations by denying `Subscription` resources whose package name appears in a ConfigMap.
 
 ### The ConfigMap
 
-`policies/blocklist/blocked-operators-configmap.yaml` lives in the `kyverno` namespace and contains one field:
-
-- **`packages`** — comma-separated list of OLM package names to block.
+Both engines use the same data format — a comma-separated list of OLM package names:
 
 ```yaml
 data:
@@ -189,9 +313,12 @@ data:
     compliance-operator
 ```
 
-### The Policy — Block Subscriptions
+- **Kyverno:** `policies/kyverno/blocklist/blocked-operators-configmap.yaml` (namespace: `kyverno`)
+- **VAP:** `policies/vap/blocklist/blocked-operators-configmap.yaml` (namespace: `operator-guardrails`)
 
-File: `policies/blocklist/block-operator-subscriptions.yaml`
+### Kyverno — Block Subscriptions
+
+File: `policies/kyverno/blocklist/block-operator-subscriptions.yaml`
 
 When someone creates or updates a `Subscription` resource, this policy:
 
@@ -202,6 +329,19 @@ When someone creates or updates a `Subscription` resource, this policy:
 
 **Key technique:** The `AnyIn` operator checks membership in the array produced by `split()`.
 
+### VAP — Block Subscriptions
+
+Files: `policies/vap/blocklist/block-operator-subscriptions-policy.yaml` and `block-operator-subscriptions-binding.yaml`
+
+The same logic, expressed in CEL:
+
+1. The policy declares `paramKind: ConfigMap` and the binding references the `blocked-operators` ConfigMap.
+2. A CEL variable splits the packages string: `params.data.packages.split(',')`.
+3. The validation expression checks membership: `!variables.blockedPackages.exists(p, p.trim() == variables.operatorName)`.
+4. If the operator is in the blocked list, the expression returns `false` and the request is denied.
+
+**Key technique:** CEL's `exists()` macro with `trim()` handles the comma-separated list with whitespace.
+
 ---
 
 ## How the Allowlist Policy Works
@@ -210,9 +350,7 @@ The allowlist policy is the inverse of the blocklist. It denies `Subscription` r
 
 ### The ConfigMap
 
-`policies/allowlist/allowed-operators-configmap.yaml` lives in the `kyverno` namespace and contains one field:
-
-- **`packages`** — comma-separated list of OLM package names that are permitted.
+Both engines use the same data format:
 
 ```yaml
 data:
@@ -221,9 +359,12 @@ data:
     openshift-gitops-operator
 ```
 
-### The Policy — Allow Subscriptions
+- **Kyverno:** `policies/kyverno/allowlist/allowed-operators-configmap.yaml` (namespace: `kyverno`)
+- **VAP:** `policies/vap/allowlist/allowed-operators-configmap.yaml` (namespace: `operator-guardrails`)
 
-File: `policies/allowlist/allow-operator-subscriptions.yaml`
+### Kyverno — Allow Subscriptions
+
+File: `policies/kyverno/allowlist/allow-operator-subscriptions.yaml`
 
 When someone creates or updates a `Subscription` resource, this policy:
 
@@ -243,6 +384,19 @@ deny:
         value: "{{ allowedPackages.data.packages | split(@, ', ') }}"
 ```
 
+### VAP — Allow Subscriptions
+
+Files: `policies/vap/allowlist/allow-operator-subscriptions-policy.yaml` and `allow-operator-subscriptions-binding.yaml`
+
+The same logic, expressed in CEL:
+
+1. The policy declares `paramKind: ConfigMap` and the binding references the `allowed-operators` ConfigMap.
+2. A CEL variable splits the packages string: `params.data.packages.split(',')`.
+3. The validation expression checks membership: `variables.allowedPackages.exists(p, p.trim() == variables.operatorName)`.
+4. If the operator is **not** in the allowed list, the expression returns `false` and the request is denied.
+
+**Key technique:** The expression is the positive form (`exists`) rather than the negated form used for blocklist — returning `true` only when the operator is found in the allowed list.
+
 ### Blocklist vs Allowlist — When to Use Each
 
 | Approach | Best for |
@@ -256,51 +410,66 @@ Deploy one or the other — not both at the same time on the same cluster.
 
 ## Deploying the Policies
 
-Choose **one** approach — blocklist or allowlist — and deploy it.
+Choose **one** approach — blocklist or allowlist — and **one** engine — Kyverno or VAP.
 
-### Blocklist — Using Kustomize (recommended)
+### Kyverno
+
+#### Blocklist — Using Kustomize (recommended)
 
 ```bash
-oc apply -k policies/blocklist/
+oc apply -k policies/kyverno/blocklist/
 ```
 
 This applies the blocked-operators ConfigMap and the block ClusterPolicy in one step.
 
-#### Manual apply
+#### Allowlist — Using Kustomize (recommended)
 
 ```bash
-oc apply -f policies/blocklist/blocked-operators-configmap.yaml
-oc apply -f policies/blocklist/block-operator-subscriptions.yaml
+oc apply -k policies/kyverno/allowlist/
 ```
 
-### Allowlist — Using Kustomize (recommended)
+#### Verify Kyverno
 
 ```bash
-oc apply -k policies/allowlist/
-```
-
-This applies the allowed-operators ConfigMap and the allow ClusterPolicy in one step.
-
-#### Manual apply
-
-```bash
-oc apply -f policies/allowlist/allowed-operators-configmap.yaml
-oc apply -f policies/allowlist/allow-operator-subscriptions.yaml
-```
-
-### Verify
-
-```bash
-# Check the policy is ready
 oc get clusterpolicies
 
 # Expected output (blocklist):
 # NAME                           ADMISSION   BACKGROUND   VALIDATE ACTION   READY
 # block-operator-subscriptions   true        false        Enforce           True
+```
 
-# Expected output (allowlist):
-# NAME                           ADMISSION   BACKGROUND   VALIDATE ACTION   READY
-# allow-operator-subscriptions   true        false        Enforce           True
+### VAP
+
+#### Blocklist
+
+```bash
+oc apply -f policies/vap/namespace.yaml
+oc apply -k policies/vap/blocklist/
+```
+
+This creates the `operator-guardrails` namespace, applies the ConfigMap, and creates the ValidatingAdmissionPolicy and its binding.
+
+#### Allowlist
+
+```bash
+oc apply -f policies/vap/namespace.yaml
+oc apply -k policies/vap/allowlist/
+```
+
+#### Verify VAP
+
+```bash
+oc get validatingadmissionpolicy
+
+# Expected output (blocklist):
+# NAME                           VALIDATIONS   PARAMKIND        AGE
+# block-operator-subscriptions   1             ConfigMap        10s
+
+oc get validatingadmissionpolicybinding
+
+# Expected output (blocklist):
+# NAME                           POLICYNAME                     PARAMREF          AGE
+# block-operator-subscriptions   block-operator-subscriptions   blocked-operators  10s
 ```
 
 ---
@@ -323,10 +492,10 @@ brew install kyverno
 
 ```bash
 # Blocklist tests
-kyverno test tests/blocklist/
+kyverno test tests/kyverno/blocklist/
 
 # Allowlist tests
-kyverno test tests/allowlist/
+kyverno test tests/kyverno/allowlist/
 ```
 
 Each test directory contains a `kyverno-test.yaml` manifest referencing the policy, a values file for ConfigMap context data, and sample resources. The `results` section declares the expected outcome for each resource.
@@ -347,14 +516,44 @@ Each test directory contains a `kyverno-test.yaml` manifest referencing the poli
 
 ---
 
+## Testing VAP on a Live Cluster
+
+VAP does not have an offline CLI testing tool like Kyverno. Tests run against a live cluster using `oc apply --dry-run=server`, which sends the request through admission policies without creating the resource.
+
+### Run the test scripts
+
+```bash
+# Blocklist tests
+tests/vap/blocklist/test.sh
+
+# Allowlist tests
+tests/vap/allowlist/test.sh
+
+# Audit policy tests
+tests/vap/audit/test.sh
+```
+
+### What the tests verify
+
+The VAP tests check the same scenarios as the Kyverno tests:
+
+| Test | Blocklist Expected | Allowlist Expected |
+|------|-------------------|-------------------|
+| `ansible-automation-platform-operator` | Denied | Denied |
+| `web-terminal` | Allowed | Allowed |
+
+---
+
 ## Verifying on a Live Cluster
 
 After deploying the policy, test it on the cluster.
 
-### Blocklist — Test 1: Blocked Subscription
+### Kyverno Verification
+
+#### Blocklist — Blocked Subscription
 
 ```bash
-oc apply -f tests/blocklist/resources/blocked-subscription.yaml
+oc apply -f tests/kyverno/blocklist/resources/blocked-subscription.yaml
 ```
 
 Expected output:
@@ -371,26 +570,26 @@ block-operator-subscriptions:
   is blocked by policy. ...
 ```
 
-### Blocklist — Test 2: Allowed Subscription
+#### Blocklist — Allowed Subscription
 
 ```bash
-oc apply -f tests/blocklist/resources/allowed-subscription.yaml
+oc apply -f tests/kyverno/blocklist/resources/allowed-subscription.yaml
 ```
 
 Expected: the Subscription is created (or you see an OLM error if the operator doesn't exist in your catalog — but no Kyverno denial).
 
-### Allowlist — Test 1: Approved Subscription
+#### Allowlist — Approved Subscription
 
 ```bash
-oc apply -f tests/allowlist/resources/whitelisted-subscription.yaml
+oc apply -f tests/kyverno/allowlist/resources/whitelisted-subscription.yaml
 ```
 
 Expected: the Subscription is created (the operator is on the approved list).
 
-### Allowlist — Test 2: Unapproved Subscription
+#### Allowlist — Unapproved Subscription
 
 ```bash
-oc apply -f tests/allowlist/resources/non-whitelisted-subscription.yaml
+oc apply -f tests/kyverno/allowlist/resources/non-whitelisted-subscription.yaml
 ```
 
 Expected output:
@@ -407,80 +606,156 @@ allow-operator-subscriptions:
   is not on the approved list. ...
 ```
 
+### VAP Verification
+
+#### Blocklist — Blocked Subscription
+
+```bash
+oc apply -f tests/vap/blocklist/resources/blocked-subscription.yaml
+```
+
+Expected output:
+
+```
+Error from server: admission webhook denied the request:
+ValidatingAdmissionPolicy 'block-operator-subscriptions' ...
+The operator "ansible-automation-platform-operator" is blocked by policy.
+Contact your cluster administrator to request an exception.
+```
+
+#### Blocklist — Allowed Subscription
+
+```bash
+oc apply -f tests/vap/blocklist/resources/allowed-subscription.yaml
+```
+
+Expected: the Subscription is created without denial.
+
+#### Allowlist — Approved Subscription
+
+```bash
+oc apply -f tests/vap/allowlist/resources/whitelisted-subscription.yaml
+```
+
+Expected: the Subscription is created (the operator is on the approved list).
+
+#### Allowlist — Unapproved Subscription
+
+```bash
+oc apply -f tests/vap/allowlist/resources/non-whitelisted-subscription.yaml
+```
+
+Expected output:
+
+```
+Error from server: admission webhook denied the request:
+ValidatingAdmissionPolicy 'allow-operator-subscriptions' ...
+The operator "ansible-automation-platform-operator" is not on the approved list.
+Contact your cluster administrator to request approval.
+```
+
 ---
 
 ## Managing the Operator Lists
 
-### Blocklist — Add or remove a blocked operator
+### Kyverno
 
-1. Edit `policies/blocklist/blocked-operators-configmap.yaml`.
+#### Blocklist — Add or remove a blocked operator
+
+1. Edit `policies/kyverno/blocklist/blocked-operators-configmap.yaml`.
 2. Add or remove the OLM package name in the `packages` field.
 3. Apply the updated ConfigMap:
 
    ```bash
-   oc apply -f policies/blocklist/blocked-operators-configmap.yaml
+   oc apply -f policies/kyverno/blocklist/blocked-operators-configmap.yaml
    ```
 
 Kyverno picks up the ConfigMap change automatically — no policy restart needed.
 
-### Allowlist — Add or remove an approved operator
+#### Allowlist — Add or remove an approved operator
 
-1. Edit `policies/allowlist/allowed-operators-configmap.yaml`.
+1. Edit `policies/kyverno/allowlist/allowed-operators-configmap.yaml`.
 2. Add or remove the OLM package name in the `packages` field.
 3. Apply the updated ConfigMap:
 
    ```bash
-   oc apply -f policies/allowlist/allowed-operators-configmap.yaml
+   oc apply -f policies/kyverno/allowlist/allowed-operators-configmap.yaml
    ```
 
-### Switch to Audit mode for dry-run
+#### Switch to Audit mode
 
-Edit the relevant ClusterPolicy YAML and change:
-
-```yaml
-spec:
-  validationFailureAction: Enforce
-```
-
-to:
-
-```yaml
-spec:
-  validationFailureAction: Audit
-```
-
-Re-apply the policy. Violations will be logged but not blocked. View violations with:
+Edit the relevant ClusterPolicy YAML and change `validationFailureAction: Enforce` to `validationFailureAction: Audit`. Re-apply the policy. View violations with:
 
 ```bash
 oc get policyreport -A
 oc get clusterpolicyreport
 ```
 
+### VAP
+
+#### Blocklist — Add or remove a blocked operator
+
+1. Edit `policies/vap/blocklist/blocked-operators-configmap.yaml`.
+2. Add or remove the OLM package name in the `packages` field.
+3. Apply the updated ConfigMap:
+
+   ```bash
+   oc apply -f policies/vap/blocklist/blocked-operators-configmap.yaml
+   ```
+
+The API server picks up ConfigMap changes automatically — no policy redeployment needed.
+
+#### Allowlist — Add or remove an approved operator
+
+1. Edit `policies/vap/allowlist/allowed-operators-configmap.yaml`.
+2. Add or remove the OLM package name in the `packages` field.
+3. Apply the updated ConfigMap:
+
+   ```bash
+   oc apply -f policies/vap/allowlist/allowed-operators-configmap.yaml
+   ```
+
+#### Switch to Audit mode
+
+Edit the relevant binding YAML and change `validationActions: [Deny]` to `validationActions: [Audit]`. Re-apply the binding. Audit events appear in the Kubernetes API server audit log.
+
 ---
 
 ## Troubleshooting
 
-### Policy shows READY=False
+### Kyverno — Policy shows READY=False
 
 ```bash
-# For blocklist
 oc describe clusterpolicy block-operator-subscriptions
-
-# For allowlist
 oc describe clusterpolicy allow-operator-subscriptions
 ```
 
-Check the `status.conditions` for error messages. Common causes:
+Check `status.conditions` for error messages. Common causes:
 
 - The ConfigMap (`blocked-operators` or `allowed-operators`) does not exist in the `kyverno` namespace.
 - Kyverno does not have permission to read ConfigMaps in its namespace.
 
+### VAP — Policy not taking effect
+
+```bash
+oc describe validatingadmissionpolicy block-operator-subscriptions
+oc describe validatingadmissionpolicybinding block-operator-subscriptions
+```
+
+Common causes:
+
+- The ConfigMap does not exist in the `operator-guardrails` namespace. Check with `oc get configmap -n operator-guardrails`.
+- The `operator-guardrails` namespace was not created. Apply `policies/vap/namespace.yaml` first.
+- The cluster does not support VAP (requires Kubernetes 1.30+ / OpenShift 4.17+). Check with `oc api-resources | grep validatingadmissionpolicies`.
+- The binding has `parameterNotFoundAction: Deny`, so a missing ConfigMap will deny all subscriptions.
+
 ### Operator still installs despite the policy
 
-- Confirm the policy is in `Enforce` mode (not `Audit`).
+- **Kyverno:** Confirm the policy is in `Enforce` mode (not `Audit`).
+- **VAP:** Confirm the binding uses `validationActions: [Deny]` (not `[Audit]`).
 - For blocklist: confirm the operator's package name is in the blocked ConfigMap's `packages` list with the exact spelling used by the OLM catalog.
 - For allowlist: confirm the operator's package name is **not** in the allowed ConfigMap's `packages` list (if you want it denied), or **is** in the list (if you want it permitted).
-- Check if the Subscription already existed before the policy was applied — Kyverno only intercepts new creates/updates.
+- Check if the Subscription already existed before the policy was applied — both engines only intercept new creates/updates.
 
   ```bash
   oc get subscriptions -A

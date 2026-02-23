@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: unrelated-config
+  namespace: operator-guardrails
+data:
+  key: value

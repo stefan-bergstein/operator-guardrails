@@ -3,7 +3,7 @@ kind: Test
 metadata:
   name: audit-guardrail-changes-test
 policies:
-  - ../../policies/audit/audit-guardrail-changes.yaml
+  - ../../../policies/kyverno/audit/audit-guardrail-changes.yaml
 resources:
   - resources/guardrail-configmap.yaml
   - resources/regular-configmap.yaml

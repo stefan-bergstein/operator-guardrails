@@ -32,13 +32,14 @@ compliance-operator
 
 ### Generating the blocked-operators ConfigMap
 
-Pipe the output into the ConfigMap format expected by the blocklist policy:
+Pipe the output into the ConfigMap format expected by the blocklist policy.
+
+#### For Kyverno (namespace: kyverno)
 
 ```bash
-
 PACKAGES=$(bash contrib/no-oke-ops.sh | paste -sd ',' - | sed 's/,/,\n    /g')
 
-cat > policies/blocklist/blocked-operators-configmap.yaml <<EOF
+cat > policies/kyverno/blocklist/blocked-operators-configmap.yaml <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -55,8 +56,32 @@ data:
 EOF
 ```
 
-Review the generated file, then apply it:
+```bash
+oc apply -f policies/kyverno/blocklist/blocked-operators-configmap.yaml
+```
+
+#### For VAP (namespace: operator-guardrails)
 
 ```bash
-oc apply -f policies/blocklist/blocked-operators-configmap.yaml
+PACKAGES=$(bash contrib/no-oke-ops.sh | paste -sd ',' - | sed 's/,/,\n    /g')
+
+cat > policies/vap/blocklist/blocked-operators-configmap.yaml <<EOF
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: blocked-operators
+  namespace: operator-guardrails
+  labels:
+    app.kubernetes.io/part-of: operator-guardrails
+data:
+  # Auto-generated from contrib/no-oke-ops.sh
+  # Operators not included in an OKE subscription.
+  #
+  packages: >-
+    ${PACKAGES}
+EOF
+```
+
+```bash
+oc apply -f policies/vap/blocklist/blocked-operators-configmap.yaml
 ```

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: allowed-operators
+  namespace: operator-guardrails
+  labels:
+    app.kubernetes.io/part-of: operator-guardrails
+data:
+  packages: >-
+    web-terminal,
+    openshift-gitops-operator

@@ -3,10 +3,10 @@ kind: Test
 metadata:
   name: operator-allowlist-test
 policies:
-  - ../../policies/allowlist/allow-operator-subscriptions.yaml
+  - ../../../policies/kyverno/allowlist/allow-operator-subscriptions.yaml
 variables: values.yaml
 resources:
-  - ../../policies/allowlist/allowed-operators-configmap.yaml
+  - ../../../policies/kyverno/allowlist/allowed-operators-configmap.yaml
   - resources/whitelisted-subscription.yaml
   - resources/non-whitelisted-subscription.yaml
 results:

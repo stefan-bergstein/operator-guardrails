@@ -3,10 +3,10 @@ kind: Test
 metadata:
   name: operator-guardrails-test
 policies:
-  - ../../policies/blocklist/block-operator-subscriptions.yaml
+  - ../../../policies/kyverno/blocklist/block-operator-subscriptions.yaml
 variables: values.yaml
 resources:
-  - ../../policies/blocklist/blocked-operators-configmap.yaml
+  - ../../../policies/kyverno/blocklist/blocked-operators-configmap.yaml
   - resources/blocked-subscription.yaml
   - resources/allowed-subscription.yaml
 results:

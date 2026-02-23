@@ -1,0 +1,10 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: audit-guardrail-changes
+  labels:
+    app.kubernetes.io/part-of: operator-guardrails
+spec:
+  policyName: audit-guardrail-changes
+  validationActions:
+    - Audit

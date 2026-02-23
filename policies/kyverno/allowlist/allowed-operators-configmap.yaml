@@ -9,7 +9,7 @@ data:
   # Comma-separated list of OLM package names to allow.
   # Only operators in this list may be installed. All others are denied.
   # To update the list, edit and re-apply:
-  #   oc apply -f policies/allowlist/allowed-operators-configmap.yaml
+  #   oc apply -f policies/kyverno/allowlist/allowed-operators-configmap.yaml
   #
   packages: >-
     web-terminal,
