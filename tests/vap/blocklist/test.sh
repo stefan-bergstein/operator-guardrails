@@ -4,7 +4,8 @@
 #   - Logged in to the cluster (oc login / kubectl configured)
 #   - OLM installed (Subscription CRD must exist)
 #   - VAP blocklist policies deployed: oc apply -k policies/vap/blocklist/
-set -euo pipefail
+
+set -eu
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PASS=0
@@ -15,6 +16,7 @@ echo ""
 
 # Test 1: Blocked operator should be denied
 echo -n "Test 1: Blocked operator (ansible-automation-platform-operator) is denied ... "
+
 if oc apply --dry-run=server -f "$SCRIPT_DIR/resources/blocked-subscription.yaml" 2>&1 | grep -qi "blocked by policy\|denied\|forbidden"; then
   echo "PASS"
   PASS=$((PASS + 1))

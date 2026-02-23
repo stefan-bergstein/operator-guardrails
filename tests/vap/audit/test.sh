@@ -7,7 +7,7 @@
 # The audit policy uses validationActions: [Audit], so it never blocks
 # requests. This test verifies that the policy is active and generates
 # audit annotations for matching resources.
-set -euo pipefail
+set -eu
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PASS=0

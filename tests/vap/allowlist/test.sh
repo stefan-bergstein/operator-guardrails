@@ -4,7 +4,7 @@
 #   - Logged in to the cluster (oc login / kubectl configured)
 #   - OLM installed (Subscription CRD must exist)
 #   - VAP allowlist policies deployed: oc apply -k policies/vap/allowlist/
-set -euo pipefail
+# set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PASS=0
