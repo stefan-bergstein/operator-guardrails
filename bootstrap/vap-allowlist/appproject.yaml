@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: operator-guardrails
+  namespace: openshift-gitops
+  labels:
+    app.kubernetes.io/part-of: operator-guardrails
+spec:
+  description: Operator installation guardrails
+  sourceRepos:
+    - https://github.com/stefan-bergstein/operator-guardrails.git
+  destinations:
+    - namespace: operator-guardrails
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: admissionregistration.k8s.io
+      kind: ValidatingAdmissionPolicy
+    - group: admissionregistration.k8s.io
+      kind: ValidatingAdmissionPolicyBinding
+    - group: ""
+      kind: Namespace
